@@ -1,5 +1,6 @@
 package com.example.media.weight;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
@@ -13,6 +14,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.PopupWindow;
 
 import com.example.item.Contast;
@@ -31,6 +33,7 @@ public class FolderWindow {
     private MediaFolderAdapter mFolderAdapter;
     private Context mContext;
     private View mViewRoot;
+    private View mShowView;
 
     public void setOnPopupItemClickListener(OnPopupItemClickListener onPopupItemClickListener) {
         this.onPopupItemClickListener = onPopupItemClickListener;
@@ -94,16 +97,39 @@ public class FolderWindow {
             mRvFolder.setItemAnimator(new DefaultItemAnimator());
             mRvFolder.setAdapter(mFolderAdapter);
             mPopupWindow.setContentView(inflateView);
+            mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                        windowAnimation(false);
+                }
+            });
+
+            //  mPopupWindow.setAnimationStyle(R.style.DialogAnimation);
 
         }
     }
 
     public void showWindows(@NonNull View view) {
+        this.mShowView = view;
         mPopupWindow.showAtLocation(view, Gravity.BOTTOM, 0, ScreenUtils.dp2px(view.getContext(), Contast.DEFAULT_VIEW_HEIGHT));
+        windowAnimation(true);
     }
+
 
     public interface OnPopupItemClickListener {
         void onItemClick(@NonNull View view, int position);
+    }
+
+    private void windowAnimation(boolean isOpen) {
+        ObjectAnimator objectAnimator;
+        if (isOpen) {
+            objectAnimator = ObjectAnimator.ofFloat(mViewRoot, "translationY", (1920 - ScreenUtils.dp2px(mContext, mShowView.getHeight())), 0);
+        } else {
+            objectAnimator = ObjectAnimator.ofFloat(mViewRoot, "translationY", 0,(1920 - ScreenUtils.dp2px(mContext, mShowView.getHeight())) );
+        }
+        objectAnimator.setInterpolator(new LinearInterpolator());
+        objectAnimator.setDuration(500);
+        objectAnimator.start();
     }
 
 }

@@ -39,7 +39,6 @@ public class MediaFolderAdapter extends RecyclerView.Adapter<MediaFolderAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
         if (mData.get(i).firstFilePath != null) {
-            Log.w("onBindViewHolder--",/*mData.get(0).firstFilePath*/i + "----");
             GlideUtils.loadImage(viewHolder.itemView.getContext(), mData.get(i).firstFilePath, viewHolder.mIvLeft);
         }
 
