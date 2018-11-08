@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">media</string>
+    <string name="back">返回</string>
+    <string name="sure">完成</string>
+    <string name="all_image">全部图片</string>
+    <string name="preview">预览</string>
+    <string name="how_match_open">%s张</string>
+    <string name="count_sum_count">%s/%s</string>
+    <string name="selector">选择</string>
+    <string name="complete_count">完成（%s/%s）</string>
+    <string name="max_choose_media">最大选择%s张</string>
+</resources>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.example.media.weight.PreviewViewPager
+        android:id="@+id/vp_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.item.weight.TitleView
+        android:id="@+id/ctv_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:group_color="@color/colorTheme"
+        app:back_text_size="16sp"
+        app:back_left_drawable="@mipmap/icon_image_back"
+        app:back_text_padding_left="10dp"
+        app:back_text_padding_right="10dp"
+        app:sure_text_color="@color/colorTextSelector"
+        app:sure_text_size="16sp"
+        app:sure_text_padding_right="10dp"
+        app:sure_text_padding_left="10dp"
+        app:sure_data="@string/sure"
+        />
+
+    <com.example.item.weight.TitleView
+        android:id="@+id/ctv_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:back_click_is_finish="false"
+        app:group_color="@color/colorTheme"
+        app:sure_data="@string/selector"
+        app:sure_text_padding_left="10dp"
+        app:sure_text_padding_right="10dp"
+        app:sure_left_drawable="@mipmap/icon_preview_uncheck"
+        app:sure_text_size="16sp"
+        />
+
+
+</RelativeLayout>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.example.item.weight.TitleView
+        android:id="@+id/ctv_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:back_data="@string/back"
+        app:back_left_drawable="@mipmap/icon_image_back"
+        app:back_text_padding_left="10dp"
+        app:back_text_padding_right="10dp"
+        app:back_text_size="16sp"
+        app:group_color="@color/colorTheme"
+        app:sure_data="@string/sure"
+        app:sure_text_color="@color/colorTextUnSelector"
+        app:sure_text_padding_left="10dp"
+        app:sure_text_padding_right="10dp"
+        app:sure_text_size="16sp" />
+
+    <com.example.item.weight.TitleView
+        android:id="@+id/ctv_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:back_click_is_finish="false"
+        app:back_data="@string/all_image"
+        app:back_right_drawable="@mipmap/icon_image_type"
+        app:back_text_padding_left="10dp"
+        app:back_text_padding_right="10dp"
+        app:back_text_size="16sp"
+        app:group_color="@color/colorTheme"
+        app:sure_data="@string/preview"
+        app:sure_text_padding_left="10dp"
+        app:sure_text_padding_right="10dp"
+        app:sure_text_size="16sp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/ry_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/ctv_bottom"
+        android:layout_below="@id/ctv_top"
+        android:background="@color/colorFF191814"/>
+
+
+</RelativeLayout>

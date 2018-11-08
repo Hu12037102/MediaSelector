@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorTheme">#FF303030</color>
+    <color name="colorText">#FFEEEEEE</color>
+    <color name="colorTextUnSelector">#FF285428</color>
+    <color name="colorTextSelector">#FF1F8F1F</color>
+    <color name="colorFF191814">#FF191814</color>
+    <color name="color80000000">#80000000</color>
+</resources>
