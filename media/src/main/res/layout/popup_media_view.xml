@@ -13,6 +13,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="200dp"
         android:background="@color/colorFFFFFFFF"
+        android:scrollbars="vertical"
         />
 
 </LinearLayout>
