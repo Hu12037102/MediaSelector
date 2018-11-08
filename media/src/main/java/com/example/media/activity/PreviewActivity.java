@@ -15,6 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 
@@ -44,15 +45,6 @@ public class PreviewActivity extends BaseActivity {
     private boolean isShowTitleView = true;
     private int mPreviewPosition;
 
-
-   /* @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_preview);
-        initView();
-        initData();
-        initEvent();
-    }*/
 
     @Override
     protected void initUI() {
@@ -119,7 +111,7 @@ public class PreviewActivity extends BaseActivity {
                 mMediaFileData.get(mPreviewPosition).isCheck = !mMediaFileData.get(mPreviewPosition).isCheck;
                 mTvBottom.mTvSure.setCompoundDrawablesWithIntrinsicBounds(mMediaFileData.get(mPreviewPosition).isCheck ? R.mipmap.icon_preview_check : R.mipmap.icon_preview_uncheck, 0, 0, 0);
                 EventBus.getDefault().post(mMediaFileData.get(mPreviewPosition));
-               // setResult(Activity.RESULT_OK);
+                // setResult(Activity.RESULT_OK);
                /* Intent intent = new Intent();
                     intent.putParcelableArrayListExtra(Contast.KEY_PREVIEW_MEDIA, (ArrayList<? extends Parcelable>) mMediaFileData);
                     setResult(Activity.RESULT_OK, intent);*/
@@ -145,19 +137,42 @@ public class PreviewActivity extends BaseActivity {
         ObjectAnimator bottomAnimatorTranslation;
         AnimatorSet animatorSet = new AnimatorSet();
         if (isShowTitleView) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             topAnimatorTranslation = ObjectAnimator.ofFloat(mTvTop, "translationY", 0, -(ScreenUtils.getStatuWindowsHeight(this) + mTvTop.getMeasuredHeight()));
             bottomAnimatorTranslation = ObjectAnimator.ofFloat(mTvBottom, "translationY", 0, (mTvBottom.getMeasuredHeight()));
 
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             topAnimatorTranslation = ObjectAnimator.ofFloat(mTvTop, "translationY", -(ScreenUtils.getStatuWindowsHeight(this) + mTvTop.getMeasuredHeight()), 0);
             bottomAnimatorTranslation = ObjectAnimator.ofFloat(mTvBottom, "translationY", (mTvBottom.getMeasuredHeight()), 0);
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         }
         animatorSet.setDuration(500);
         animatorSet.setInterpolator(new LinearInterpolator());
         animatorSet.play(topAnimatorTranslation).with(bottomAnimatorTranslation);
         animatorSet.start();
+        animatorSet.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+            //    mPreviewAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
     }
 
 

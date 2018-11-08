@@ -276,7 +276,6 @@ public class MediaActivity extends BaseActivity {
 
     @Subscribe(sticky = true)
     public void previewMediaResult(@NonNull MediaSelectorFile mediaSelectorFile) {
-        Log.w("previewMediaResult--", mediaSelectorFile.isCheck + "--");
         if (mediaSelectorFile.isCheck) {
             //首先先判断选择的媒体库
             if (!mCheckMediaFileData.contains(mediaSelectorFile)) {

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.example.media.bean.MediaSelectorFile;
 import com.example.media.utils.GlideUtils;
+import com.example.media.utils.ScreenUtils;
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
 
@@ -61,8 +62,8 @@ public class PreviewAdapter extends PagerAdapter {
         PhotoView photoView = new PhotoView(container.getContext());
         container.addView(photoView);
         ViewGroup.LayoutParams layoutParams = photoView.getLayoutParams();
-        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        layoutParams.width = ScreenUtils.screenWidth(container.getContext());
+        layoutParams.height = ScreenUtils.screenHeight(container.getContext());
         photoView.setLayoutParams(layoutParams);
         GlideUtils.loadImage(container.getContext(), mData.get(position).filePath, photoView);
         photoView.setOnPhotoTapListener(new OnPhotoTapListener() {

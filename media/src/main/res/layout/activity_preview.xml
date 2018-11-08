@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:back_click_is_finish="false"
-        app:group_color="@color/colorTheme"
+        app:group_color="@color/colorA0000000"
         app:sure_data="@string/selector"
         app:sure_text_padding_left="10dp"
         app:sure_text_padding_right="10dp"
