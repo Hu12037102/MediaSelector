@@ -4,7 +4,9 @@ import android.Manifest;
 import android.animation.Animator;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
@@ -23,11 +25,13 @@ import com.example.media.bean.MediaSelectorFolder;
 import com.example.media.resolver.Contast;
 import com.example.media.resolver.ILoadMediaResult;
 import com.example.media.resolver.MediaHelper;
+import com.example.media.utils.FileUtils;
 import com.example.media.weight.FolderWindow;
 import com.example.media.weight.Toasts;
 
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +46,8 @@ public class MediaActivity extends BaseActivity {
     private FolderWindow mFolderWindow;
     private List<MediaSelectorFile> mCheckMediaFileData;
     private MediaSelector.MediaOptions mOptions;
+    private MediaSelectorFile mCameraMediaFile;
+    private File mCameraFile;
 
 
     @Override
@@ -89,7 +95,6 @@ public class MediaActivity extends BaseActivity {
     protected void onDestroy() {
         unRegisterEventBus();
         super.onDestroy();
-//        Glide.with(this).onDestroy();
     }
 
     @Override
@@ -103,14 +108,12 @@ public class MediaActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-
         initIntent();
-
         MediaHelper mediaHelper = new MediaHelper(this);
         mCheckMediaFileData = new ArrayList<>();
 
         if (mMediaFileAdapter == null) {
-            mMediaFileData = new ArrayList<>();
+
             mMediaFileAdapter = new MediaFileAdapter(this, mMediaFileData);
             mRecyclerView.setAdapter(mMediaFileAdapter);
         }
@@ -132,6 +135,7 @@ public class MediaActivity extends BaseActivity {
     }
 
     private void initIntent() {
+        mMediaFileData = new ArrayList<>();
         Intent intent = getIntent();
         mOptions = intent.getParcelableExtra(Contast.KEY_OPEN_MEDIA);
         if (mOptions == null) {
@@ -140,6 +144,11 @@ public class MediaActivity extends BaseActivity {
             if (mOptions.maxChooseMedia <= 0) {
                 mOptions.maxChooseMedia = 1;
             }
+        }
+        if (mOptions.isShowCamera) {
+            mCameraMediaFile = new MediaSelectorFile();
+            mCameraMediaFile.isShowCamera = true;
+            mMediaFileData.add(mCameraMediaFile);
         }
     }
 
@@ -175,7 +184,11 @@ public class MediaActivity extends BaseActivity {
         mMediaFileAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
             @Override
             public void itemClick(@NonNull View view, int position) {
-                toPreviewActivity(position, mMediaFileData, mCheckMediaFileData);
+                if (mMediaFileData.get(position).isShowCamera) {
+                    openCamera();
+                } else {
+                    toPreviewActivity(position, mMediaFileData, mCheckMediaFileData);
+                }
             }
         });
 
@@ -216,6 +229,35 @@ public class MediaActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 打开相机
+     */
+    private void openCamera() {
+        requestPermission(new OnPermissionsResult() {
+            @Override
+            public void onAllow(List<String> list) {
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                cameraIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+                    mCameraFile = FileUtils.resultImageFile(MediaActivity.this);
+                    Uri cameraUri = FileUtils.fileToUri(MediaActivity.this, mCameraFile, cameraIntent);
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUri);
+                    startActivityForResult(cameraIntent, Contast.REQUEST_CAMERA_CODE);
+                }
+            }
+
+            @Override
+            public void onNoAllow(List<String> list) {
+
+            }
+
+            @Override
+            public void onForbid(List<String> list) {
+
+            }
+        },Manifest.permission.CAMERA);
+    }
+
     private void toPreviewActivity(int position, @NonNull List<MediaSelectorFile> data, @NonNull List<MediaSelectorFile> checkData) {
         Intent intent = new Intent(MediaActivity.this, PreviewActivity.class);
         intent.putParcelableArrayListExtra(Contast.KEY_PREVIEW_DATA_MEDIA, (ArrayList<? extends Parcelable>) data);
@@ -225,9 +267,6 @@ public class MediaActivity extends BaseActivity {
         startActivityForResult(intent, Contast.REQUEST_CODE_MEDIA_TO_PREVIEW);
     }
 
-    private void closeMediaFolderWindows() {
-
-    }
 
     private void showMediaFolderWindows(View view) {
 
@@ -242,8 +281,6 @@ public class MediaActivity extends BaseActivity {
             mFolderWindow.showWindows(view);
         } else if (mFolderWindow.getFolderWindow().isShowing()) {
             mFolderWindow.dismissWindows();
-            //  mFolderWindow.getFolderWindow().dismiss();
-
         } else {
             mFolderWindow.showWindows(view);
         }
@@ -311,8 +348,21 @@ public class MediaActivity extends BaseActivity {
                 if (requestCode == Contast.REQUEST_CODE_MEDIA_TO_PREVIEW) {
                     resultMediaData();
                     finish();
+                }else if (requestCode == Contast.REQUEST_CAMERA_CODE){
+                    if(FileUtils.existsFile(mCameraFile.getAbsolutePath())){
+                        FileUtils.scanImage(this, mCameraFile);
+                        MediaSelectorFile mediaFile = new MediaSelectorFile();
+                        mediaFile.folderPath = mCameraFile.getParentFile().getAbsolutePath();
+                        mediaFile.filePath = mCameraFile.getAbsolutePath();
+                        mediaFile.isCheck = true;
+                        mCheckMediaFileData.add(mediaFile);
+                        resultMediaData();
+                        finish();
+
+                    }
                 }
                 break;
+
         }
     }
 }

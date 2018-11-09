@@ -14,5 +14,9 @@ public class GlideUtils {
         RequestOptions options= new RequestOptions().centerCrop().placeholder(R.mipmap.icon_image_background).error(R.mipmap.icon_image_background);
         Glide.with(context).asBitmap().apply(options).load(url).into(imageView);
     }
+    public static void loadImage(@NonNull Context context, @DrawableRes int resId, @NonNull ImageView imageView){
+        RequestOptions options= new RequestOptions().centerInside().placeholder(R.mipmap.icon_image_background).error(R.mipmap.icon_image_background);
+        Glide.with(context).asBitmap().apply(options).load(resId).into(imageView);
+    }
 
 }

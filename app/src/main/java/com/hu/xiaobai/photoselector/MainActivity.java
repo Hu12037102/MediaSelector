@@ -80,7 +80,9 @@ public class MainActivity extends PermissionActivity {
                         }
                         mDataAdapter.notifyDataSetChanged();
                     }
-                    MediaSelector.with(MainActivity.this).openMediaActivity();
+                    MediaSelector.MediaOptions mediaOptions = new MediaSelector.MediaOptions();
+                    mediaOptions.isShowCamera = true;
+                    MediaSelector.with(MainActivity.this).setMediaOptions(mediaOptions).openMediaActivity();
                 }
             }
         });

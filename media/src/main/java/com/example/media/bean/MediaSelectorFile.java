@@ -8,13 +8,13 @@ import java.io.File;
 public class MediaSelectorFile implements Parcelable {
     public String fileName;
     public String filePath;
-    public File file;
     public int fileSize;
     public int width;
     public int height;
     public String folderName;
     public String folderPath;
     public boolean isCheck;
+    public boolean isShowCamera;
 
     public MediaSelectorFile() {
     }
@@ -28,6 +28,7 @@ public class MediaSelectorFile implements Parcelable {
         folderName = in.readString();
         folderPath = in.readString();
         isCheck = in.readByte() != 0;
+        isShowCamera = in.readByte() != 0;
     }
 
     public static final Creator<MediaSelectorFile> CREATOR = new Creator<MediaSelectorFile>() {
@@ -57,6 +58,7 @@ public class MediaSelectorFile implements Parcelable {
         dest.writeString(folderName);
         dest.writeString(folderPath);
         dest.writeByte((byte) (isCheck ? 1 : 0));
+        dest.writeByte((byte) (isShowCamera ? 1 : 0));
     }
 
     @Override

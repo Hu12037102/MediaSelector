@@ -8,7 +8,6 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.media.bean.MediaSelectorFile;
@@ -65,7 +64,6 @@ public class MediaHelper {
                     mediaFile.folderName = FileUtils.getParentFileName(mediaFile.filePath);
                     mediaFile.folderPath = FileUtils.getParentFilePath(mediaFile.filePath);
                 } else {
-                    Log.w("loadMedia--", mediaFile.fileName + "-----" + mediaFile.filePath);
                     continue;
                 }
 
@@ -84,8 +82,8 @@ public class MediaHelper {
             }
             cursor.close();
             MediaSelectorFolder allMediaFolder = new MediaSelectorFolder();
-            allMediaFolder.folderPath = "全部文件";
-            allMediaFolder.folderName = "全部文件";
+            allMediaFolder.folderPath = Contast.ALL_FILE;
+            allMediaFolder.folderName = Contast.ALL_FILE;
             allMediaFolder.firstFilePath = mAllFileData.get(0).filePath;
             allMediaFolder.fileData.addAll(mAllFileData);
             allMediaFolder.isCheck = true;
