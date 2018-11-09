@@ -55,7 +55,12 @@ public class PreviewActivity extends BaseActivity {
     @Override
     protected void initView() {
         mVpPreview = findViewById(R.id.vp_preview);
+        ViewGroup.LayoutParams layoutParams = mVpPreview.getLayoutParams();
+        layoutParams.width = ScreenUtils.screenWidth(this);
+        layoutParams.height = ScreenUtils.screenHeight(this);
+        mVpPreview.setLayoutParams(layoutParams);
         mTvTop = findViewById(R.id.ctv_top);
+
         mTvBottom = findViewById(R.id.ctv_bottom);
     }
 
@@ -151,28 +156,7 @@ public class PreviewActivity extends BaseActivity {
         animatorSet.setInterpolator(new LinearInterpolator());
         animatorSet.play(topAnimatorTranslation).with(bottomAnimatorTranslation);
         animatorSet.start();
-        animatorSet.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
 
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-
-            //    mPreviewAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
     }
 
 
