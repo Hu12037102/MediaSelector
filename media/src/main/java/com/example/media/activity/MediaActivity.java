@@ -220,9 +220,13 @@ public class MediaActivity extends BaseActivity {
         Intent intent = new Intent(MediaActivity.this, PreviewActivity.class);
         intent.putParcelableArrayListExtra(Contast.KEY_PREVIEW_DATA_MEDIA, (ArrayList<? extends Parcelable>) data);
         intent.putParcelableArrayListExtra(Contast.KEY_PREVIEW_CHECK_MEDIA, (ArrayList<? extends Parcelable>) checkData);
-        intent.putExtra(Contast.KEY_OPEN_MEDIA,mOptions);
+        intent.putExtra(Contast.KEY_OPEN_MEDIA, mOptions);
         intent.putExtra(Contast.KEY_PREVIEW_POSITION, position);
         startActivityForResult(intent, Contast.REQUEST_CODE_MEDIA_TO_PREVIEW);
+    }
+
+    private void closeMediaFolderWindows() {
+
     }
 
     private void showMediaFolderWindows(View view) {
@@ -237,28 +241,8 @@ public class MediaActivity extends BaseActivity {
             });
             mFolderWindow.showWindows(view);
         } else if (mFolderWindow.getFolderWindow().isShowing()) {
-            mFolderWindow.openWindowAnimation(false, new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mFolderWindow.getFolderWindow().dismiss();
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-                    mFolderWindow.getFolderWindow().dismiss();
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-
-                }
-            });
-          //  mFolderWindow.getFolderWindow().dismiss();
+            mFolderWindow.dismissWindows();
+            //  mFolderWindow.getFolderWindow().dismiss();
 
         } else {
             mFolderWindow.showWindows(view);

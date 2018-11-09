@@ -1,5 +1,6 @@
 package com.example.media.weight;
 
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -55,7 +56,7 @@ public class FolderWindow {
         mViewRoot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPopupWindow.dismiss();
+                FolderWindow.this.dismissWindows();
             }
         });
         mFolderAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
@@ -64,22 +65,17 @@ public class FolderWindow {
                 if (onPopupItemClickListener != null) {
                     onPopupItemClickListener.onItemClick(view, position);
                 }
-                mPopupWindow.dismiss();
+                FolderWindow.this.dismissWindows();
             }
         });
     }
 
-
-    public void notifyData(@NonNull List<MediaSelectorFolder> folderData) {
-        mFolderData.clear();
-        mFolderData.addAll(folderData);
-        if (mFolderAdapter != null) {
-            mFolderAdapter.notifyDataSetChanged();
-        }
-    }
-
     public PopupWindow getFolderWindow() {
         return mPopupWindow;
+    }
+
+    public void dismissWindows() {
+        windowAnimation(false);
     }
 
     private void createWindows() {
@@ -107,7 +103,7 @@ public class FolderWindow {
     public void showWindows(@NonNull View view) {
         this.mShowView = view;
         mPopupWindow.showAtLocation(view, Gravity.BOTTOM, 0, ScreenUtils.dp2px(view.getContext(), Contast.DEFAULT_VIEW_HEIGHT));
-        openWindowAnimation(true, null);
+        windowAnimation(true);
     }
 
 
@@ -115,19 +111,41 @@ public class FolderWindow {
         void onItemClick(@NonNull View view, int position);
     }
 
-    public void openWindowAnimation(boolean isOpen,@Nullable ObjectAnimator.AnimatorListener listener) {
+    private void windowAnimation(final boolean isOpen) {
         ObjectAnimator objectAnimator;
         if (isOpen) {
-            objectAnimator = ObjectAnimator.ofFloat(mViewRoot, "translationY", (1920 - ScreenUtils.dp2px(mContext, mShowView.getHeight())), 0);
+            objectAnimator = ObjectAnimator.ofFloat(mViewRoot, "translationY", (ScreenUtils.screenHeight(mContext) - ScreenUtils.dp2px(mContext, mShowView.getHeight())), 0);
         } else {
-            objectAnimator = ObjectAnimator.ofFloat(mViewRoot, "translationY", 0, (1920 - ScreenUtils.dp2px(mContext, mShowView.getHeight())));
+            objectAnimator = ObjectAnimator.ofFloat(mViewRoot, "translationY", 0, (ScreenUtils.screenHeight(mContext) - ScreenUtils.dp2px(mContext, mShowView.getHeight())));
         }
         objectAnimator.setInterpolator(new LinearInterpolator());
-        objectAnimator.setDuration(500);
+        objectAnimator.setDuration(600);
         objectAnimator.start();
-        if (listener != null) {
-            objectAnimator.addListener(listener);
-        }
+        objectAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (!isOpen) {
+                    mPopupWindow.dismiss();
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                if (!isOpen) {
+                    mPopupWindow.dismiss();
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
 
     }
 

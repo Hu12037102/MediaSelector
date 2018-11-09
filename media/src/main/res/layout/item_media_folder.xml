@@ -4,7 +4,8 @@
     android:layout_height="100dp"
     android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
 
@@ -28,7 +29,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:textSize="16sp" />
+            android:textColor="@color/colorFF333333"
+            android:textSize="16sp"
+            tools:text = "huge"/>
 
         <TextView
             android:id="@+id/tv_count"
