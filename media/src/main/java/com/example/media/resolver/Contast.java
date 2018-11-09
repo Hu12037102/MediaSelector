@@ -1,7 +1,8 @@
 package com.example.media.resolver;
 
 public interface Contast {
-    String KEY_PREVIEW_MEDIA = "key_preview_media";
+    String KEY_PREVIEW_DATA_MEDIA = "key_preview_data_media";
+    String KEY_PREVIEW_CHECK_MEDIA = "key_preview_check_media";
     String KEY_PREVIEW_POSITION = "key_preview_position";
     String KEY_CLEAR_MEDIA_DATA = "key_clear_media_data";
     int REQUEST_CODE_MEDIA_TO_PREVIEW = 101;
