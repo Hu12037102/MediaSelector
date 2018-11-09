@@ -6,9 +6,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
+    <Button
+        android:onClick="toMediaFragmentActivity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="To_Fragment"
+        android:textAllCaps="false"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_media"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
 
 </LinearLayout>

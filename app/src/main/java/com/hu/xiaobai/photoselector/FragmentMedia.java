@@ -1,68 +1,63 @@
 package com.hu.xiaobai.photoselector;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.ActivityManager;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.database.Cursor;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
-import com.baixiaohu.permission.PermissionActivity;
-import com.baixiaohu.permission.imp.OnPermissionsResult;
 import com.example.media.MediaSelector;
 import com.example.media.OnRecyclerItemClickListener;
 import com.example.media.bean.MediaSelectorFile;
-import com.example.media.bean.MediaSelectorFolder;
-import com.example.media.resolver.ILoadMediaResult;
-import com.example.media.resolver.MediaHelper;
-import com.orhanobut.logger.AndroidLogAdapter;
-import com.orhanobut.logger.Logger;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-public class MainActivity extends PermissionActivity {
-
-
+public class FragmentMedia extends Fragment {
     private DataAdapter mDataAdapter;
     private RecyclerView mRyMedia;
     private List<MediaSelectorFile> mData;
+    private View mInflateView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        initView();
-        initData();
-        initEvent();
 
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mInflateView = inflater.inflate(R.layout.fragment_media, container, false);
+        return mInflateView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initView();
+        initData();
+        initEvent();
+    }
 
     private void initData() {
         mData = new ArrayList<>();
         MediaSelectorFile mediaSelectorFile = new MediaSelectorFile();
         mData.add(mediaSelectorFile);
-        mDataAdapter = new DataAdapter(this, mData);
+        mDataAdapter = new DataAdapter(getActivity(), mData);
         mRyMedia.setAdapter(mDataAdapter);
     }
 
     private void initView() {
-        mRyMedia = findViewById(R.id.rv_media);
-        mRyMedia.setLayoutManager(new GridLayoutManager(this, 3));
+        mRyMedia = mInflateView.findViewById(R.id.rv_media);
+        mRyMedia.setLayoutManager(new GridLayoutManager(getActivity(), 3));
 
     }
 
@@ -80,7 +75,7 @@ public class MainActivity extends PermissionActivity {
                         }
                         mDataAdapter.notifyDataSetChanged();
                     }
-                    MediaSelector.with(MainActivity.this).openMediaActivity();
+                    MediaSelector.with(FragmentMedia.this).openMediaActivity();
                 }
             }
         });
@@ -90,16 +85,10 @@ public class MainActivity extends PermissionActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         List<MediaSelectorFile> mediaList = MediaSelector.resultMediaFile(data);
-
         if (mediaList != null && mediaList.size() > 0) {
             mData.addAll(0, mediaList);
             mDataAdapter.notifyDataSetChanged();
 
         }
-        Log.w("onActivityResult--", mData.size() + "--");
-    }
-
-    public void toMediaFragmentActivity(View view) {
-        startActivity(new Intent(this, MediaFragmentActivity.class));
     }
 }
