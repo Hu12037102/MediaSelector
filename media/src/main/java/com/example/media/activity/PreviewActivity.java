@@ -88,6 +88,7 @@ public class PreviewActivity extends BaseActivity {
             return;
         }
         mTvTop.mTvBack.setText(getString(R.string.count_sum_count, String.valueOf(mPreviewPosition + 1), String.valueOf(mMediaFileData.size())));
+        setTitleViewSureText();
         mTvBottom.mTvSure.setCompoundDrawablesWithIntrinsicBounds(mMediaFileData.get(mPreviewPosition).isCheck ? R.mipmap.icon_preview_check : R.mipmap.icon_preview_uncheck, 0, 0, 0);
         mPreviewAdapter = new PreviewAdapter(mMediaFileData);
         mVpPreview.setAdapter(mPreviewAdapter);
@@ -121,7 +122,9 @@ public class PreviewActivity extends BaseActivity {
                 mTvTop.mTvBack.setText(getString(R.string.count_sum_count, String.valueOf(i + 1), String.valueOf(mMediaFileData.size())));
                 mTvBottom.mTvSure.setCompoundDrawablesWithIntrinsicBounds(mMediaFileData.get(i).isCheck ? R.mipmap.icon_preview_check : R.mipmap.icon_preview_uncheck, 0, 0, 0);
                 mCheckAdapter.notifyCheckData(mMediaFileData.get(mPreviewPosition));
-
+                if(mCheckMediaData.contains(mMediaFileData.get(mPreviewPosition))){
+                    mRvCheckMedia.scrollToPosition(mCheckMediaData.indexOf(mMediaFileData.get(mPreviewPosition)));
+                }
             }
 
             @Override
