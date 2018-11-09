@@ -1,11 +1,11 @@
 package com.example.media.activity;
 
 import android.Manifest;
+import android.animation.Animator;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -219,7 +219,8 @@ public class MediaActivity extends BaseActivity {
     private void toPreviewActivity(int position, @NonNull List<MediaSelectorFile> data, @NonNull List<MediaSelectorFile> checkData) {
         Intent intent = new Intent(MediaActivity.this, PreviewActivity.class);
         intent.putParcelableArrayListExtra(Contast.KEY_PREVIEW_DATA_MEDIA, (ArrayList<? extends Parcelable>) data);
-            intent.putParcelableArrayListExtra(Contast.KEY_PREVIEW_CHECK_MEDIA, (ArrayList<? extends Parcelable>) checkData);
+        intent.putParcelableArrayListExtra(Contast.KEY_PREVIEW_CHECK_MEDIA, (ArrayList<? extends Parcelable>) checkData);
+        intent.putExtra(Contast.KEY_OPEN_MEDIA,mOptions);
         intent.putExtra(Contast.KEY_PREVIEW_POSITION, position);
         startActivityForResult(intent, Contast.REQUEST_CODE_MEDIA_TO_PREVIEW);
     }
@@ -236,7 +237,29 @@ public class MediaActivity extends BaseActivity {
             });
             mFolderWindow.showWindows(view);
         } else if (mFolderWindow.getFolderWindow().isShowing()) {
-            mFolderWindow.getFolderWindow().dismiss();
+            mFolderWindow.openWindowAnimation(false, new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mFolderWindow.getFolderWindow().dismiss();
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    mFolderWindow.getFolderWindow().dismiss();
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+          //  mFolderWindow.getFolderWindow().dismiss();
+
         } else {
             mFolderWindow.showWindows(view);
         }

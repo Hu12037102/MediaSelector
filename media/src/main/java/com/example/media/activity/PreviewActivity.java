@@ -22,6 +22,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
 
 import com.example.item.weight.TitleView;
+import com.example.media.MediaSelector;
 import com.example.media.OnRecyclerItemClickListener;
 import com.example.media.R;
 import com.example.media.adapter.MediaCheckAdapter;
@@ -53,6 +54,7 @@ public class PreviewActivity extends BaseActivity {
     private List<MediaSelectorFile> mCheckMediaData;
     private MediaCheckAdapter mCheckAdapter;
     private AnimatorSet mAnimatorSet;
+    private MediaSelector.MediaOptions mOptions;
 
 
     @Override
@@ -79,6 +81,7 @@ public class PreviewActivity extends BaseActivity {
         mCheckMediaData = intent.getParcelableArrayListExtra(Contast.KEY_PREVIEW_CHECK_MEDIA);
         mMediaFileData = intent.getParcelableArrayListExtra(Contast.KEY_PREVIEW_DATA_MEDIA);
         mPreviewPosition = intent.getIntExtra(Contast.KEY_PREVIEW_POSITION, 0);
+        mOptions = intent.getParcelableExtra(Contast.KEY_OPEN_MEDIA);
         if (mMediaFileData == null || mMediaFileData.size() == 0) {
             Toasts.with().showToast(this, "没有预览媒体库文件");
             finish();
@@ -95,6 +98,14 @@ public class PreviewActivity extends BaseActivity {
         mRvCheckMedia.setAdapter(mCheckAdapter);
         mCheckAdapter.notifyCheckData(mMediaFileData.get(mPreviewPosition));
         initAdapterEvent();
+    }
+
+    private void setTitleViewSureText() {
+        if (mCheckMediaData.size() > 0) {
+            mTvTop.mTvSure.setText(getString(R.string.complete_count, String.valueOf(mCheckMediaData.size()), String.valueOf(mOptions.maxChooseMedia)));
+        } else {
+            mTvTop.mTvSure.setText(R.string.sure);
+        }
     }
 
     private void initAdapterEvent() {
@@ -145,21 +156,29 @@ public class PreviewActivity extends BaseActivity {
         mTvBottom.setOnSureViewClickListener(new TitleView.OnSureViewClickListener() {
             @Override
             public void onSureClick(@NonNull View view) {
-                mMediaFileData.get(mPreviewPosition).isCheck = !mMediaFileData.get(mPreviewPosition).isCheck;
-                mTvBottom.mTvSure.setCompoundDrawablesWithIntrinsicBounds(mMediaFileData.get(mPreviewPosition).isCheck ? R.mipmap.icon_preview_check : R.mipmap.icon_preview_uncheck, 0, 0, 0);
-                EventBus.getDefault().post(mMediaFileData.get(mPreviewPosition));
-                if (mCheckAdapter != null) {
-                    if (mMediaFileData.get(mPreviewPosition).isCheck) {
-                        mCheckAdapter.addItemNotifyData(mMediaFileData.get(mPreviewPosition));
-                        mRvCheckMedia.scrollToPosition(mCheckMediaData.indexOf(mMediaFileData.get(mPreviewPosition)));
+                if (mCheckMediaData.size() < mOptions.maxChooseMedia || (mCheckMediaData.size() == mOptions.maxChooseMedia && mMediaFileData.get(mPreviewPosition).isCheck)) {
+                    mMediaFileData.get(mPreviewPosition).isCheck = !mMediaFileData.get(mPreviewPosition).isCheck;
+                    mTvBottom.mTvSure.setCompoundDrawablesWithIntrinsicBounds(mMediaFileData.get(mPreviewPosition).isCheck ? R.mipmap.icon_preview_check : R.mipmap.icon_preview_uncheck, 0, 0, 0);
+                    EventBus.getDefault().post(mMediaFileData.get(mPreviewPosition));
+                    if (mCheckAdapter != null) {
+                        if (mMediaFileData.get(mPreviewPosition).isCheck) {
+                            mCheckAdapter.addItemNotifyData(mMediaFileData.get(mPreviewPosition));
+                            mRvCheckMedia.scrollToPosition(mCheckMediaData.indexOf(mMediaFileData.get(mPreviewPosition)));
 
-                    } else {
-                        if (mCheckMediaData.contains(mMediaFileData.get(mPreviewPosition))) {
-                            mCheckAdapter.removeItemNotifyData(mCheckMediaData.indexOf(mMediaFileData.get(mPreviewPosition)));
-                            mRvCheckMedia.scrollToPosition(mCheckMediaData.size() - 1);
+                        } else {
+                            if (mCheckMediaData.contains(mMediaFileData.get(mPreviewPosition))) {
+                                mCheckAdapter.removeItemNotifyData(mCheckMediaData.indexOf(mMediaFileData.get(mPreviewPosition)));
+                                mRvCheckMedia.scrollToPosition(mCheckMediaData.size() - 1);
+                            }
                         }
                     }
+                    //设置完成的数量
+                    setTitleViewSureText();
+                } else {
+                    Toasts.with().showToast(PreviewActivity.this, R.string.max_choose_media, String.valueOf(mOptions.maxChooseMedia));
                 }
+
+
             }
         });
         mTvTop.setOnSureViewClickListener(new TitleView.OnSureViewClickListener() {
@@ -201,8 +220,6 @@ public class PreviewActivity extends BaseActivity {
 
 
     }
-
-
 
 
 }

@@ -97,12 +97,7 @@ public class FolderWindow {
             mRvFolder.setItemAnimator(new DefaultItemAnimator());
             mRvFolder.setAdapter(mFolderAdapter);
             mPopupWindow.setContentView(inflateView);
-            mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                @Override
-                public void onDismiss() {
-                        windowAnimation(false);
-                }
-            });
+
 
             //  mPopupWindow.setAnimationStyle(R.style.DialogAnimation);
 
@@ -112,7 +107,7 @@ public class FolderWindow {
     public void showWindows(@NonNull View view) {
         this.mShowView = view;
         mPopupWindow.showAtLocation(view, Gravity.BOTTOM, 0, ScreenUtils.dp2px(view.getContext(), Contast.DEFAULT_VIEW_HEIGHT));
-        windowAnimation(true);
+        openWindowAnimation(true, null);
     }
 
 
@@ -120,16 +115,20 @@ public class FolderWindow {
         void onItemClick(@NonNull View view, int position);
     }
 
-    private void windowAnimation(boolean isOpen) {
+    public void openWindowAnimation(boolean isOpen,@Nullable ObjectAnimator.AnimatorListener listener) {
         ObjectAnimator objectAnimator;
         if (isOpen) {
             objectAnimator = ObjectAnimator.ofFloat(mViewRoot, "translationY", (1920 - ScreenUtils.dp2px(mContext, mShowView.getHeight())), 0);
         } else {
-            objectAnimator = ObjectAnimator.ofFloat(mViewRoot, "translationY", 0,(1920 - ScreenUtils.dp2px(mContext, mShowView.getHeight())) );
+            objectAnimator = ObjectAnimator.ofFloat(mViewRoot, "translationY", 0, (1920 - ScreenUtils.dp2px(mContext, mShowView.getHeight())));
         }
         objectAnimator.setInterpolator(new LinearInterpolator());
         objectAnimator.setDuration(500);
         objectAnimator.start();
+        if (listener != null) {
+            objectAnimator.addListener(listener);
+        }
+
     }
 
 }
