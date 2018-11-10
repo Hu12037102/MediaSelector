@@ -38,7 +38,7 @@ public class MediaCheckAdapter extends RecyclerView.Adapter<MediaCheckAdapter.Vi
 
     public void removeItemNotifyData(int position) {
         mData.remove(position);
-        this.notifyItemRemoved(position);
+         this.notifyDataSetChanged();
     }
 
     public void addItemNotifyData(@NonNull MediaSelectorFile previewMedia) {
