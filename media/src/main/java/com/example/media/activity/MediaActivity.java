@@ -3,12 +3,15 @@ package com.example.media.activity;
 import android.Manifest;
 import android.animation.Animator;
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -26,6 +29,7 @@ import com.example.media.resolver.Contast;
 import com.example.media.resolver.ILoadMediaResult;
 import com.example.media.resolver.MediaHelper;
 import com.example.media.utils.FileUtils;
+import com.example.media.weight.DialogHelper;
 import com.example.media.weight.FolderWindow;
 import com.example.media.weight.Toasts;
 
@@ -48,6 +52,7 @@ public class MediaActivity extends BaseActivity {
     private MediaSelector.MediaOptions mOptions;
     private MediaSelectorFile mCameraMediaFile;
     private File mCameraFile;
+    private AlertDialog mCameraPermissionDialog;
 
 
     @Override
@@ -57,6 +62,7 @@ public class MediaActivity extends BaseActivity {
 
     @Override
     protected void initPermission() {
+
         requestPermission(new OnPermissionsResult() {
             @Override
             public void onAllow(List<String> list) {
@@ -75,6 +81,25 @@ public class MediaActivity extends BaseActivity {
         }, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
 
+    }
+
+    private void showNoAllowDialog(Context context, String title, String message) {
+        if (mCameraPermissionDialog == null) {
+            mCameraPermissionDialog = DialogHelper.with().createDialog(context, title, message, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    mCameraPermissionDialog.dismiss();
+                }
+            }, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    openCamera();
+                }
+            });
+        }
+        if (!mCameraPermissionDialog.isShowing()) {
+            mCameraPermissionDialog.show();
+        }
     }
 
     @Override
@@ -248,14 +273,16 @@ public class MediaActivity extends BaseActivity {
 
             @Override
             public void onNoAllow(List<String> list) {
-
+                showNoAllowDialog(MediaActivity.this, getString(R.string.hint), getString(R.string.camera_permission_is_must));
             }
 
             @Override
             public void onForbid(List<String> list) {
 
+                showForbidPermissionDialog();
+
             }
-        },Manifest.permission.CAMERA);
+        }, Manifest.permission.CAMERA);
     }
 
     private void toPreviewActivity(int position, @NonNull List<MediaSelectorFile> data, @NonNull List<MediaSelectorFile> checkData) {
@@ -348,8 +375,8 @@ public class MediaActivity extends BaseActivity {
                 if (requestCode == Contast.REQUEST_CODE_MEDIA_TO_PREVIEW) {
                     resultMediaData();
                     finish();
-                }else if (requestCode == Contast.REQUEST_CAMERA_CODE){
-                    if(FileUtils.existsFile(mCameraFile.getAbsolutePath())){
+                } else if (requestCode == Contast.REQUEST_CAMERA_CODE) {
+                    if (FileUtils.existsFile(mCameraFile.getAbsolutePath())) {
                         FileUtils.scanImage(this, mCameraFile);
                         MediaSelectorFile mediaFile = new MediaSelectorFile();
                         mediaFile.folderPath = mCameraFile.getParentFile().getAbsolutePath();

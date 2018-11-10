@@ -9,4 +9,9 @@
     <string name="selector">选择</string>
     <string name="complete_count">完成（%s/%s）</string>
     <string name="max_choose_media">最大选择%s张</string>
+    <string name="hint">提示</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">确定</string>
+    <string name="camera_permission_is_must">相机为必要权限，请允许，否则无法使用</string>
+
 </resources>
