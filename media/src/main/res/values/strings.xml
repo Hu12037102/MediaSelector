@@ -12,6 +12,9 @@
     <string name="hint">提示</string>
     <string name="cancel">取消</string>
     <string name="confirm">确定</string>
-    <string name="camera_permission_is_must">相机为必要权限，请允许，否则无法使用</string>
+    <string name="camera">相机</string>
+    <string name="what_permission_is_must">%s为必要权限，请允许，否则无法使用</string>
+    <string name="memory_card">储存卡</string>
+    <string name="not_gain_media_photo">没有获取到照片</string>
 
 </resources>

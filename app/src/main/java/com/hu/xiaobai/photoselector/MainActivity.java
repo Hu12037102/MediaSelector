@@ -1,40 +1,22 @@
 package com.hu.xiaobai.photoselector;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.ActivityManager;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.database.Cursor;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
-import com.baixiaohu.permission.PermissionActivity;
-import com.baixiaohu.permission.imp.OnPermissionsResult;
 import com.example.media.MediaSelector;
 import com.example.media.OnRecyclerItemClickListener;
 import com.example.media.bean.MediaSelectorFile;
-import com.example.media.bean.MediaSelectorFolder;
-import com.example.media.resolver.ILoadMediaResult;
-import com.example.media.resolver.MediaHelper;
-import com.orhanobut.logger.AndroidLogAdapter;
-import com.orhanobut.logger.Logger;
-
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-public class MainActivity extends PermissionActivity {
+public class MainActivity extends AppCompatActivity {
 
 
     private DataAdapter mDataAdapter;

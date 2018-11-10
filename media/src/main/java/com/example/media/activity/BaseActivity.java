@@ -6,8 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.WindowManager;
 
-import com.baixiaohu.permission.PermissionActivity;
 import com.example.media.R;
+import com.example.media.permission.PermissionActivity;
 import com.example.media.resolver.ActivityManger;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 

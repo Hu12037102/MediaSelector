@@ -2,6 +2,7 @@ package com.example.media.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import java.io.File;
 
@@ -71,5 +72,14 @@ public class MediaSelectorFile implements Parcelable {
             }
         }
         return super.equals(obj);
+    }
+
+
+    public boolean hasData() {
+        return !TextUtils.isEmpty(fileName) && TextUtils.getTrimmedLength(fileName) > 0
+                && !TextUtils.isEmpty(filePath) && TextUtils.getTrimmedLength(filePath) > 0
+                && fileSize > 0 && width > 0 && height > 0
+                && !TextUtils.isEmpty(folderName) && TextUtils.getTrimmedLength(folderName) > 0
+                && !TextUtils.isEmpty(folderPath) && TextUtils.getTrimmedLength(folderPath) > 0;
     }
 }

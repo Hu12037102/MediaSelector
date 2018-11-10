@@ -3,6 +3,7 @@ package com.example.media.resolver;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.database.Cursor;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -10,10 +11,13 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.bumptech.glide.load.model.MediaStoreFileLoader;
 import com.example.media.bean.MediaSelectorFile;
 import com.example.media.bean.MediaSelectorFolder;
 import com.example.media.utils.FileUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +41,7 @@ public class MediaHelper {
     public MediaHelper(@NonNull Activity activity) {
         this.mActivity = activity;
     }
+
 
     public void loadMedia(ILoadMediaResult onResult) {
         Cursor cursor = mActivity.getContentResolver().query(MediaHelper.QUERY_URI, MediaHelper.PROJECTION, MediaHelper.SELECTION_TYPE, MediaHelper.WHERE_TYPE, SORT_ORDER);
@@ -66,7 +71,6 @@ public class MediaHelper {
                 } else {
                     continue;
                 }
-
                 MediaSelectorFolder mediaFolder = new MediaSelectorFolder();
                 mediaFolder.folderPath = mediaFile.folderPath;
                 //首先判断该文件的父文件夹有没有在集合中？有的话直接把文件加入对应的文件夹：没有就新建一个文件夹再添加进去

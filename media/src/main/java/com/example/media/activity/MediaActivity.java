@@ -1,12 +1,12 @@
 package com.example.media.activity;
 
 import android.Manifest;
-import android.animation.Animator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -14,9 +14,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
-import com.baixiaohu.permission.imp.OnPermissionsResult;
 import com.bumptech.glide.Glide;
 import com.example.item.weight.TitleView;
 import com.example.media.MediaSelector;
@@ -25,6 +25,7 @@ import com.example.media.R;
 import com.example.media.adapter.MediaFileAdapter;
 import com.example.media.bean.MediaSelectorFile;
 import com.example.media.bean.MediaSelectorFolder;
+import com.example.media.permission.imp.OnPermissionsResult;
 import com.example.media.resolver.Contast;
 import com.example.media.resolver.ILoadMediaResult;
 import com.example.media.resolver.MediaHelper;
@@ -53,6 +54,7 @@ public class MediaActivity extends BaseActivity {
     private MediaSelectorFile mCameraMediaFile;
     private File mCameraFile;
     private AlertDialog mCameraPermissionDialog;
+    private MediaHelper mMediaHelper;
 
 
     @Override
@@ -71,12 +73,12 @@ public class MediaActivity extends BaseActivity {
 
             @Override
             public void onNoAllow(List<String> list) {
-
+                showNoAllowDialog(MediaActivity.this, getString(R.string.hint), getString(R.string.what_permission_is_must, getString(R.string.memory_card)));
             }
 
             @Override
             public void onForbid(List<String> list) {
-
+                showForbidPermissionDialog();
             }
         }, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
@@ -134,7 +136,7 @@ public class MediaActivity extends BaseActivity {
     @Override
     protected void initData() {
         initIntent();
-        MediaHelper mediaHelper = new MediaHelper(this);
+        mMediaHelper = new MediaHelper(this);
         mCheckMediaFileData = new ArrayList<>();
 
         if (mMediaFileAdapter == null) {
@@ -142,7 +144,7 @@ public class MediaActivity extends BaseActivity {
             mMediaFileAdapter = new MediaFileAdapter(this, mMediaFileData);
             mRecyclerView.setAdapter(mMediaFileAdapter);
         }
-        mediaHelper.loadMedia(new ILoadMediaResult() {
+        mMediaHelper.loadMedia(new ILoadMediaResult() {
             @Override
             public void mediaResult(List<MediaSelectorFolder> data) {
                 if (data != null && data.size() > 0) {
@@ -273,7 +275,7 @@ public class MediaActivity extends BaseActivity {
 
             @Override
             public void onNoAllow(List<String> list) {
-                showNoAllowDialog(MediaActivity.this, getString(R.string.hint), getString(R.string.camera_permission_is_must));
+                showNoAllowDialog(MediaActivity.this, getString(R.string.hint), getString(R.string.what_permission_is_must, getString(R.string.camera)));
             }
 
             @Override
@@ -379,14 +381,19 @@ public class MediaActivity extends BaseActivity {
                     if (FileUtils.existsFile(mCameraFile.getAbsolutePath())) {
                         FileUtils.scanImage(this, mCameraFile);
                         MediaSelectorFile mediaFile = new MediaSelectorFile();
-                        mediaFile.folderPath = mCameraFile.getParentFile().getAbsolutePath();
+                        mediaFile.fileName = mCameraFile.getName();
                         mediaFile.filePath = mCameraFile.getAbsolutePath();
+                        mediaFile.fileSize = (int) mCameraFile.length();
+                        mediaFile.width = FileUtils.getFileWidth(mCameraFile.getAbsolutePath());
+                        mediaFile.height = FileUtils.getFileHeight(mCameraFile.getAbsolutePath());
+                        mediaFile.folderName = FileUtils.getParentFileName(mCameraFile.getAbsolutePath());
+                        mediaFile.folderPath = FileUtils.getParentFilePath(mCameraFile.getAbsolutePath());
                         mediaFile.isCheck = true;
                         mCheckMediaFileData.add(mediaFile);
                         resultMediaData();
                         finish();
-
                     }
+
                 }
                 break;
 

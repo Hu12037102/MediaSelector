@@ -30,7 +30,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    api 'com.github.Hu12037102:HuGePermission:1.1.0'
+    /*api 'com.github.Hu12037102:HuGePermission:1.1.0'*/
     api 'com.orhanobut:logger:2.2.0'
     implementation 'com.github.Hu12037102:ProjectView:1.0.1'
     implementation 'com.android.support:recyclerview-v7:28.0.0'

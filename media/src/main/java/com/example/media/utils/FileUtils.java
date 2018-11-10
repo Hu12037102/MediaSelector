@@ -4,12 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
-import android.util.Log;
 
 import com.example.media.weight.MediaScanner;
 
@@ -79,9 +80,9 @@ public class FileUtils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             String authority = context.getPackageName() + ".provider";
             uri = FileProvider.getUriForFile(context, authority, file);
-            List<ResolveInfo> resolveInfos = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-            if (resolveInfos != null && resolveInfos.size() > 0)
-                for (ResolveInfo resolveInfo : resolveInfos) {
+            List<ResolveInfo> resolveInfoData = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            if (resolveInfoData != null && resolveInfoData.size() > 0)
+                for (ResolveInfo resolveInfo : resolveInfoData) {
                     String packageName = resolveInfo.activityInfo.packageName;
                     context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 }
@@ -100,5 +101,25 @@ public class FileUtils {
             intent.setData(Uri.fromFile(file));
             context.sendBroadcast(intent);
         }
+    }
+
+    public static int getFileWidth(@NonNull String path) {
+        return getBitmapOptions(path).outWidth;
+    }
+
+    public static int getFileHeight(@NonNull String path) {
+        return getBitmapOptions(path).outHeight;
+    }
+
+    private static BitmapFactory.Options getBitmapOptions(@NonNull String path) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        options.inScaled = false;
+        options.inMutable = true;
+        Bitmap bitmap = BitmapFactory.decodeFile(path, options);
+        if (bitmap != null && !bitmap.isRecycled()) {
+            bitmap.recycle();
+        }
+        return options;
     }
 }
