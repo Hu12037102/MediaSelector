@@ -14,9 +14,9 @@ public class MediaFragmentActivity  extends AppCompatActivity{
     }
 
     private void initData() {
-        FragmentMedia fragmentMedia = new FragmentMedia();
+        MediaFragment mediaFragment = new MediaFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.root_view,fragmentMedia);
+        fragmentTransaction.add(R.id.root_view, mediaFragment);
         fragmentTransaction.commitNowAllowingStateLoss();
     }
 }

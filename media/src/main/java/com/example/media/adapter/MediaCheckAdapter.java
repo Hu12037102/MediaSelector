@@ -59,12 +59,16 @@ public class MediaCheckAdapter extends RecyclerView.Adapter<MediaCheckAdapter.Vi
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mPreviewMedia.filePath.equals(mData.get(i).filePath)) {
+
+                if (onRecyclerItemClickListener != null) {
+                    onRecyclerItemClickListener.itemClick(v, i);
+                }
+              /*  if (!mPreviewMedia.filePath.equals(mData.get(i).filePath)) {
                     if (onRecyclerItemClickListener != null) {
                         onRecyclerItemClickListener.itemClick(v, i);
                     }
                     notifyDataSetChanged();
-                }
+                }*/
 
             }
         });

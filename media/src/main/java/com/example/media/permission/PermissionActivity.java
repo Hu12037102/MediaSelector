@@ -16,6 +16,7 @@ import android.widget.Button;
 
 
 import com.example.media.permission.imp.OnPermissionsResult;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +33,7 @@ import java.util.List;
  * @author ：
  */
 
-public class PermissionActivity extends AppCompatActivity {
+public class PermissionActivity extends RxAppCompatActivity {
     private AlertDialog mForbidDialog;
     private static final int REQUEST_CODE = 100;
     private  List<String> mAllowList = new ArrayList<>();

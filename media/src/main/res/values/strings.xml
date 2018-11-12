@@ -16,5 +16,6 @@
     <string name="what_permission_is_must">%s为必要权限，请允许，否则无法使用</string>
     <string name="memory_card">储存卡</string>
     <string name="not_gain_media_photo">没有获取到照片</string>
+    <string name="compress_image_fail">压缩图片失败</string>
 
 </resources>

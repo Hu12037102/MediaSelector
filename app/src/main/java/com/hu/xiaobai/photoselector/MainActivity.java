@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     MediaSelector.MediaOptions mediaOptions = new MediaSelector.MediaOptions();
                     mediaOptions.isShowCamera = true;
+                    mediaOptions.isCompress = true;
                     MediaSelector.with(MainActivity.this).setMediaOptions(mediaOptions).openMediaActivity();
                 }
             }
@@ -80,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
             mDataAdapter.notifyDataSetChanged();
 
         }
-        Log.w("onActivityResult--", mData.size() + "--");
     }
 
     public void toMediaFragmentActivity(View view) {

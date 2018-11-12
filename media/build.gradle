@@ -30,8 +30,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    /*api 'com.github.Hu12037102:HuGePermission:1.1.0'*/
-    api 'com.orhanobut:logger:2.2.0'
     implementation 'com.github.Hu12037102:ProjectView:1.0.1'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.android.support:support-v4:28.0.0'
@@ -41,6 +39,7 @@ dependencies {
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
     implementation files('libs/systembartint-1.0.4.jar')
     implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation 'com.github.Hu12037102.ImageCompress:compress:2.0.9'
 }
 allprojects {
     repositories {

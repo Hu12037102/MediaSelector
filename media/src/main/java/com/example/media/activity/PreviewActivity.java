@@ -1,22 +1,15 @@
 package com.example.media.activity;
 
-import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
@@ -35,10 +28,12 @@ import com.example.media.weight.Toasts;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
-import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
-import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+import utils.bean.ImageConfig;
+import utils.task.CompressImageTask;
 
 public class PreviewActivity extends BaseActivity {
 
@@ -87,6 +82,13 @@ public class PreviewActivity extends BaseActivity {
             finish();
             return;
         }
+        if (mCheckMediaData != null && mCheckMediaData.size() > 0) {
+            for (int i = 0; i < mCheckMediaData.size(); i++) {
+                if (!mMediaFileData.contains(mCheckMediaData.get(i))) {
+                    mMediaFileData.add(mCheckMediaData.get(i));
+                }
+            }
+        }
         mTvTop.mTvBack.setText(getString(R.string.count_sum_count, String.valueOf(mPreviewPosition + 1), String.valueOf(mMediaFileData.size())));
         setTitleViewSureText();
         mTvBottom.mTvSure.setCompoundDrawablesWithIntrinsicBounds(mMediaFileData.get(mPreviewPosition).isCheck ? R.mipmap.icon_preview_check : R.mipmap.icon_preview_uncheck, 0, 0, 0);
@@ -122,7 +124,7 @@ public class PreviewActivity extends BaseActivity {
                 mTvTop.mTvBack.setText(getString(R.string.count_sum_count, String.valueOf(i + 1), String.valueOf(mMediaFileData.size())));
                 mTvBottom.mTvSure.setCompoundDrawablesWithIntrinsicBounds(mMediaFileData.get(i).isCheck ? R.mipmap.icon_preview_check : R.mipmap.icon_preview_uncheck, 0, 0, 0);
                 mCheckAdapter.notifyCheckData(mMediaFileData.get(mPreviewPosition));
-                if(mCheckMediaData.contains(mMediaFileData.get(mPreviewPosition))){
+                if (mCheckMediaData.contains(mMediaFileData.get(mPreviewPosition))) {
                     mRvCheckMedia.scrollToPosition(mCheckMediaData.indexOf(mMediaFileData.get(mPreviewPosition)));
                 }
             }
@@ -147,6 +149,7 @@ public class PreviewActivity extends BaseActivity {
             public void itemClick(@NonNull View view, int position) {
                 if (mMediaFileData.contains(mCheckMediaData.get(position))) {
                     mVpPreview.setCurrentItem(mMediaFileData.indexOf(mCheckMediaData.get(position)), true);
+                    mCheckAdapter.notifyDataSetChanged();
                 }
 
             }
@@ -187,8 +190,39 @@ public class PreviewActivity extends BaseActivity {
         mTvTop.setOnSureViewClickListener(new TitleView.OnSureViewClickListener() {
             @Override
             public void onSureClick(@NonNull View view) {
-                setResult(Activity.RESULT_OK);
-                finish();
+                if (mCheckMediaData.size() > 0) {
+                    if (mOptions.isCompress) {
+                        List<ImageConfig> configData = new ArrayList<>();
+                        for (int i = 0; i < mCheckMediaData.size(); i++) {
+                            configData.add(MediaSelectorFile.thisToDefaultImageConfig(mCheckMediaData.get(i)));
+                        }
+                        coompressImage(configData, new CompressImageTask.OnImagesResult() {
+                            @Override
+                            public void startCompress() {
+
+                            }
+
+                            @Override
+                            public void resultFilesSucceed(List<File> list) {
+                                mCheckMediaData.clear();
+                                for (int i = 0; i < list.size(); i++) {
+                                    mCheckMediaData.add(MediaSelectorFile.checkFileToThis(list.get(i)));
+                                }
+                                EventBus.getDefault().post(mCheckMediaData);
+                                finish();
+                            }
+
+                            @Override
+                            public void resultFilesError() {
+
+                            }
+                        });
+                    } else {
+                        EventBus.getDefault().post(mCheckMediaData);
+                        finish();
+                    }
+                }
+
 
             }
         });

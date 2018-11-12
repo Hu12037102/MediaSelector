@@ -33,10 +33,14 @@ import com.example.media.weight.FolderWindow;
 import com.example.media.weight.Toasts;
 
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import utils.bean.ImageConfig;
+import utils.task.CompressImageTask;
 
 public class MediaActivity extends BaseActivity {
 
@@ -49,7 +53,6 @@ public class MediaActivity extends BaseActivity {
     private FolderWindow mFolderWindow;
     private List<MediaSelectorFile> mCheckMediaFileData;
     private MediaSelector.MediaOptions mOptions;
-    private MediaSelectorFile mCameraMediaFile;
     private File mCameraFile;
     private AlertDialog mCameraPermissionDialog;
 
@@ -76,8 +79,7 @@ public class MediaActivity extends BaseActivity {
 
             @Override
             public void onNoAllow(List<String> list) {
-                //  showNoCameraAllowDialog(MediaActivity.this, getString(R.string.hint), getString(R.string.what_permission_is_must, getString(R.string.memory_card)));
-                DialogHelper.with().createDialog(MediaActivity.this, getString(R.string.hint), getString(R.string.what_permission_is_must, R.string.memory_card),
+                AlertDialog dialog = DialogHelper.with().createDialog(MediaActivity.this, getString(R.string.hint), getString(R.string.what_permission_is_must, getString(R.string.memory_card)),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -89,6 +91,7 @@ public class MediaActivity extends BaseActivity {
                                 requestExternalStoragePermission();
                             }
                         });
+                dialog.show();
             }
 
             @Override
@@ -186,16 +189,52 @@ public class MediaActivity extends BaseActivity {
             }
         }
         if (mOptions.isShowCamera) {
-            mCameraMediaFile = new MediaSelectorFile();
-            mCameraMediaFile.isShowCamera = true;
-            mMediaFileData.add(mCameraMediaFile);
+            MediaSelectorFile cameraMediaFile = new MediaSelectorFile();
+            cameraMediaFile.isShowCamera = true;
+            mMediaFileData.add(cameraMediaFile);
         }
     }
 
     private void resultMediaData() {
+        if (mCheckMediaFileData.size() > 0) {
+            if (mOptions.isCompress) {
+                final List<ImageConfig> configData = new ArrayList<>();
+                for (int i = 0; i < mCheckMediaFileData.size(); i++) {
+                    configData.add(MediaSelectorFile.thisToDefaultImageConfig(mCheckMediaFileData.get(i)));
+                }
+                coompressImage(configData, new CompressImageTask.OnImagesResult() {
+                    @Override
+                    public void startCompress() {
+
+                    }
+
+                    @Override
+                    public void resultFilesSucceed(List<File> list) {
+                        mCheckMediaFileData.clear();
+                        for (File file : list) {
+                            mCheckMediaFileData.add(MediaSelectorFile.checkFileToThis(file));
+                        }
+                        resultMediaIntent();
+                    }
+
+                    @Override
+                    public void resultFilesError() {
+
+                    }
+                });
+
+            } else {
+                resultMediaIntent();
+            }
+
+        }
+    }
+
+    private void resultMediaIntent() {
         Intent intent = new Intent();
         intent.putParcelableArrayListExtra(Contast.KEY_REQUEST_MEDIA_DATA, (ArrayList<? extends Parcelable>) mCheckMediaFileData);
         setResult(Contast.CODE_RESULT_MEDIA, intent);
+        finish();
     }
 
     @Override
@@ -204,7 +243,6 @@ public class MediaActivity extends BaseActivity {
             @Override
             public void onSureClick(@NonNull View view) {
                 resultMediaData();
-                finish();
             }
         });
         mTvBottom.setOnTitleViewClickListener(new TitleView.OnTitleViewClickListener() {
@@ -306,7 +344,7 @@ public class MediaActivity extends BaseActivity {
         intent.putParcelableArrayListExtra(Contast.KEY_PREVIEW_CHECK_MEDIA, (ArrayList<? extends Parcelable>) checkData);
         intent.putExtra(Contast.KEY_OPEN_MEDIA, mOptions);
         intent.putExtra(Contast.KEY_PREVIEW_POSITION, position);
-        startActivityForResult(intent, Contast.REQUEST_CODE_MEDIA_TO_PREVIEW);
+        startActivity(intent);
     }
 
 
@@ -359,8 +397,11 @@ public class MediaActivity extends BaseActivity {
         }
     }
 
-
-    @Subscribe(sticky = true)
+    /**
+     * 预览图片选择发送事件
+     * @param mediaSelectorFile
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
     public void previewMediaResult(@NonNull MediaSelectorFile mediaSelectorFile) {
         if (mediaSelectorFile.isCheck) {
             //首先先判断选择的媒体库
@@ -382,29 +423,32 @@ public class MediaActivity extends BaseActivity {
         mMediaFileAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * 预览图片返回
+     * @param checkMediaData
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
+    public void resultCheckMediaData(@NonNull List<MediaSelectorFile> checkMediaData) {
+        if (checkMediaData.size() > 0) {
+            mCheckMediaFileData.clear();
+            mCheckMediaFileData.addAll(checkMediaData);
+            resultMediaIntent();
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
             case Activity.RESULT_OK:
-                if (requestCode == Contast.REQUEST_CODE_MEDIA_TO_PREVIEW) {
-                    resultMediaData();
-                    finish();
-                } else if (requestCode == Contast.REQUEST_CAMERA_CODE) {
+                if (requestCode == Contast.REQUEST_CAMERA_CODE) {
                     if (FileUtils.existsFile(mCameraFile.getAbsolutePath())) {
                         FileUtils.scanImage(this, mCameraFile);
-                        MediaSelectorFile mediaFile = new MediaSelectorFile();
-                        mediaFile.fileName = mCameraFile.getName();
-                        mediaFile.filePath = mCameraFile.getAbsolutePath();
-                        mediaFile.fileSize = (int) mCameraFile.length();
-                        mediaFile.width = FileUtils.getFileWidth(mCameraFile.getAbsolutePath());
-                        mediaFile.height = FileUtils.getFileHeight(mCameraFile.getAbsolutePath());
-                        mediaFile.folderName = FileUtils.getParentFileName(mCameraFile.getAbsolutePath());
-                        mediaFile.folderPath = FileUtils.getParentFilePath(mCameraFile.getAbsolutePath());
-                        mediaFile.isCheck = true;
-                        mCheckMediaFileData.add(mediaFile);
+                        MediaSelectorFile mediaSelectorFile = MediaSelectorFile.checkFileToThis(mCameraFile);
+                        if (mediaSelectorFile.hasData()) {
+                            mCheckMediaFileData.add(mediaSelectorFile);
+                        }
                         resultMediaData();
-                        finish();
                     }
 
                 }

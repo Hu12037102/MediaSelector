@@ -7,11 +7,18 @@ import android.support.v4.content.ContextCompat;
 import android.view.WindowManager;
 
 import com.example.media.R;
+import com.example.media.bean.MediaSelectorFile;
 import com.example.media.permission.PermissionActivity;
 import com.example.media.resolver.ActivityManger;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.io.File;
+import java.util.List;
+
+import utils.bean.ImageConfig;
+import utils.task.CompressImageTask;
 
 public abstract class BaseActivity extends PermissionActivity {
     @Override
@@ -55,12 +62,17 @@ public abstract class BaseActivity extends PermissionActivity {
 
 
     protected void registerEventBus() {
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
     }
 
     protected void unRegisterEventBus() {
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
+    }
+    protected void coompressImage(List<ImageConfig> configData,CompressImageTask.OnImagesResult onImagesResult){
+        CompressImageTask.get().compressImages(this, configData,onImagesResult);
     }
 }

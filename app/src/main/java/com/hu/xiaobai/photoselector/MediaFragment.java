@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-public class FragmentMedia extends Fragment {
+public class MediaFragment extends Fragment {
     private DataAdapter mDataAdapter;
     private RecyclerView mRyMedia;
     private List<MediaSelectorFile> mData;
@@ -75,7 +74,10 @@ public class FragmentMedia extends Fragment {
                         }
                         mDataAdapter.notifyDataSetChanged();
                     }
-                    MediaSelector.with(FragmentMedia.this).openMediaActivity();
+                    MediaSelector.MediaOptions mediaOptions = new MediaSelector.MediaOptions();
+                    mediaOptions.isShowCamera = true;
+                    mediaOptions.isCompress = true;
+                    MediaSelector.with(MediaFragment.this).setMediaOptions(mediaOptions).openMediaActivity();
                 }
             }
         });

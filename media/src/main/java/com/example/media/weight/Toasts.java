@@ -2,10 +2,16 @@ package com.example.media.weight;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.media.R;
 
 public class Toasts {
 
@@ -24,12 +30,13 @@ public class Toasts {
 
     public void showToast(@NonNull Context context, @NonNull String text) {
         if (mToast == null) {
-            mToast = Toast.makeText(context.getApplicationContext(), text, Toast.LENGTH_SHORT);
+             mToast = Toast.makeText(context.getApplicationContext(),text, Toast.LENGTH_SHORT);
+
         } else {
             mToast.setText(text);
+            mToast.setDuration(Toast.LENGTH_SHORT);
         }
-        Log.w("showToast--","showToast");
-
+        Log.w("showToast--", "showToast");
         mToast.show();
     }
 
@@ -39,8 +46,9 @@ public class Toasts {
             mToast = Toast.makeText(context.getApplicationContext(), context.getString(text, object), Toast.LENGTH_SHORT);
         } else {
             mToast.setText(context.getString(text, object));
+            mToast.setDuration(Toast.LENGTH_SHORT);
         }
-        Log.w("showToast--","showToast");
+        Log.w("showToast--", "showToast");
         mToast.show();
     }
 }

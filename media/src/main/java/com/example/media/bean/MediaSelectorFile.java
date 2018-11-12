@@ -2,9 +2,14 @@ package com.example.media.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.example.media.utils.FileUtils;
+
 import java.io.File;
+
+import utils.bean.ImageConfig;
 
 public class MediaSelectorFile implements Parcelable {
     public String fileName;
@@ -82,4 +87,22 @@ public class MediaSelectorFile implements Parcelable {
                 && !TextUtils.isEmpty(folderName) && TextUtils.getTrimmedLength(folderName) > 0
                 && !TextUtils.isEmpty(folderPath) && TextUtils.getTrimmedLength(folderPath) > 0;
     }
+
+    public static MediaSelectorFile checkFileToThis(@NonNull File file) {
+        MediaSelectorFile mediaFile = new MediaSelectorFile();
+        mediaFile.fileName = file.getName();
+        mediaFile.filePath = file.getAbsolutePath();
+        mediaFile.fileSize = (int) file.length();
+        mediaFile.width = FileUtils.getFileWidth(file.getAbsolutePath());
+        mediaFile.height = FileUtils.getFileHeight(file.getAbsolutePath());
+        mediaFile.folderName = FileUtils.getParentFileName(file.getAbsolutePath());
+        mediaFile.folderPath = FileUtils.getParentFilePath(file.getAbsolutePath());
+        mediaFile.isCheck = true;
+        return mediaFile;
+    }
+
+    public static ImageConfig thisToDefaultImageConfig(@NonNull MediaSelectorFile mediaFile) {
+        return ImageConfig.getDefaultConfig(mediaFile.filePath);
+    }
+
 }
