@@ -65,11 +65,19 @@ public class MainActivity extends AppCompatActivity {
                     MediaSelector.MediaOptions mediaOptions = new MediaSelector.MediaOptions();
                     mediaOptions.isShowCamera = true;
                     MediaSelector.with(MainActivity.this).setMediaOptions(mediaOptions).openMediaActivity();
+
+                MediaSelector.with(MainActivity.this).openMediaActivity();
                 }
             }
         });
     }
 
+    /**
+     * 选择图片结果回调
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
