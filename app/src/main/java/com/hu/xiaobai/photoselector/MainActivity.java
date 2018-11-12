@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                     MediaSelector.MediaOptions mediaOptions = new MediaSelector.MediaOptions();
                     mediaOptions.isShowCamera = true;
-                    mediaOptions.isCompress = true;
                     MediaSelector.with(MainActivity.this).setMediaOptions(mediaOptions).openMediaActivity();
                 }
             }

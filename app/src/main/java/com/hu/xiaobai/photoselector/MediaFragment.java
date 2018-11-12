@@ -75,7 +75,6 @@ public class MediaFragment extends Fragment {
                         mDataAdapter.notifyDataSetChanged();
                     }
                     MediaSelector.MediaOptions mediaOptions = new MediaSelector.MediaOptions();
-                    mediaOptions.isShowCamera = true;
                     mediaOptions.isCompress = true;
                     MediaSelector.with(MediaFragment.this).setMediaOptions(mediaOptions).openMediaActivity();
                 }
