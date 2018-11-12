@@ -12,7 +12,8 @@ MediaSelector是一个针对于Android媒体库选择的框架，该风格完全
 ```java
 
 
-//自定义选择控制
+/** 自定义选择图片方式
+       */
  MediaSelector.MediaOptions mediaOptions = new MediaSelector.MediaOptions();
  //是否要显示拍照功能
  mediaOptions.isShowCamera = true;
@@ -25,7 +26,8 @@ MediaSelector是一个针对于Android媒体库选择的框架，该风格完全
   //Fragment中
   MediaSelector.with(MainFragment.this).setMediaOptions(mediaOptions).openMediaActivity();
 
- //默认选择图片方式设置
+ /** 默认选择图片方式
+        */
  //Activity中
   MediaSelector.with(MainActivity.this).openMediaActivity();
  //Fragment中
