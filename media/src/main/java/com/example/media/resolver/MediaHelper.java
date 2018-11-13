@@ -42,7 +42,8 @@ public class MediaHelper {
             MediaStore.Files.FileColumns.DISPLAY_NAME,
             MediaStore.Video.Media.DURATION};
     private static final String IMAGE_SELECTION_TYPE = MediaStore.Files.FileColumns.MEDIA_TYPE + "=?" + " AND " + MediaStore.MediaColumns.SIZE + ">0";
-    private static final String ALL_SELECTION_TYPE = "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=? OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?)" + " AND " + MediaStore.MediaColumns.SIZE + ">0";
+    private static final String ALL_SELECTION_TYPE = "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=? OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?)" +
+            " AND " + MediaStore.MediaColumns.SIZE + ">0";
     private static final String[] IMAGE_WHERE_TYPE = new String[]{String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)};
     private static final String[] ALL_WHERE_TYPE = new String[]{String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE), String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)};
     private static final String SORT_ORDER = MediaStore.Files.FileColumns.DATE_MODIFIED + " desc";
@@ -87,6 +88,9 @@ public class MediaHelper {
                 mediaFile.isVideo = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MEDIA_TYPE)) == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
                 if (mediaFile.isVideo) {
                     mediaFile.videoDuration = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION));
+                    if (mediaFile.videoDuration >= 60 * 60 * 1000 || mediaFile.videoDuration < 1000) {
+                        continue;
+                    }
                     mVideoFileData.add(mediaFile);
                 }
 
