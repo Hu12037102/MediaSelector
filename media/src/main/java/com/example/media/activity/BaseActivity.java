@@ -22,6 +22,9 @@ import utils.bean.ImageConfig;
 import utils.task.CompressImageTask;
 
 public abstract class BaseActivity extends PermissionActivity {
+
+    protected SystemBarTintManager mSystemBarTintManager;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,9 +45,9 @@ public abstract class BaseActivity extends PermissionActivity {
     }
 
     protected void initUI() {
-        SystemBarTintManager systemBarTintManager = new SystemBarTintManager(this);
-        systemBarTintManager.setStatusBarTintEnabled(true);
-        systemBarTintManager.setStatusBarTintColor(ContextCompat.getColor(this, R.color.colorTheme));
+        mSystemBarTintManager = new SystemBarTintManager(this);
+        mSystemBarTintManager.setStatusBarTintEnabled(true);
+        mSystemBarTintManager.setStatusBarTintColor(ContextCompat.getColor(this, R.color.colorTheme));
     }
 
     @Override

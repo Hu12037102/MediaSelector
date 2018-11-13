@@ -2,6 +2,7 @@ package com.example.media;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -69,12 +70,15 @@ public class MediaSelector {
         public boolean isCompress;
         public boolean isShowCamera;
         public boolean isShowVideo;
+        public String themeColor = "#FF303030";
+
 
         protected MediaOptions(Parcel in) {
             maxChooseMedia = in.readInt();
             isCompress = in.readByte() != 0;
             isShowCamera = in.readByte() != 0;
             isShowVideo = in.readByte() != 0;
+            themeColor = in.readString();
         }
 
         public static final Creator<MediaOptions> CREATOR = new Creator<MediaOptions>() {
@@ -100,6 +104,7 @@ public class MediaSelector {
             dest.writeByte((byte) (isCompress ? 1 : 0));
             dest.writeByte((byte) (isShowCamera ? 1 : 0));
             dest.writeByte((byte) (isShowVideo ? 1 : 0));
+            dest.writeString(themeColor);
         }
     }
 

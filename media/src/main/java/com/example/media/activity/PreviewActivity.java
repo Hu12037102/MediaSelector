@@ -3,6 +3,7 @@ package com.example.media.activity;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
@@ -81,6 +82,7 @@ public class PreviewActivity extends BaseActivity {
         mMediaFileData = intent.getParcelableArrayListExtra(Contast.KEY_PREVIEW_DATA_MEDIA);
         mPreviewPosition = intent.getIntExtra(Contast.KEY_PREVIEW_POSITION, 0);
         mOptions = intent.getParcelableExtra(Contast.KEY_OPEN_MEDIA);
+        mTvTop.mViewRoot.setBackgroundColor(Color.parseColor(mOptions.themeColor));
         if (mMediaFileData == null || mMediaFileData.size() == 0) {
             Toasts.with().showToast(this, "没有预览媒体库文件");
             finish();

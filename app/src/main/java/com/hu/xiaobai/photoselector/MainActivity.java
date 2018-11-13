@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                     mediaOptions.isShowCamera = true;
                     mediaOptions.isShowVideo = true;
                     mediaOptions.isCompress = true;
+                    //mediaOptions.themeColor = "#FF4081";
                     MediaSelector.with(MainActivity.this).setMediaOptions(mediaOptions).openMediaActivity();
 
                 }
