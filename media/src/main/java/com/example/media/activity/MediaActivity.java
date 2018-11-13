@@ -160,7 +160,7 @@ public class MediaActivity extends BaseActivity {
             mMediaFileAdapter = new MediaFileAdapter(this, mMediaFileData);
             mRecyclerView.setAdapter(mMediaFileAdapter);
         }
-        mediaHelper.loadMedia(mOptions.isShowCamera,mOptions.isShowVideo, new ILoadMediaResult() {
+        mediaHelper.loadMedia(mOptions.isShowCamera, mOptions.isShowVideo, new ILoadMediaResult() {
             @Override
             public void mediaResult(List<MediaSelectorFolder> data) {
                 if (data != null && data.size() > 0) {
@@ -192,12 +192,8 @@ public class MediaActivity extends BaseActivity {
 
     private void resultMediaData() {
         if (mCheckMediaFileData.size() > 0) {
-            if (mOptions.isCompress) {
-                final List<ImageConfig> configData = new ArrayList<>();
-                for (int i = 0; i < mCheckMediaFileData.size(); i++) {
-                    configData.add(MediaSelectorFile.thisToDefaultImageConfig(mCheckMediaFileData.get(i)));
-                }
-                coompressImage(configData, new CompressImageTask.OnImagesResult() {
+            if (mOptions.isCompress && !mOptions.isShowVideo) {
+                compressImage(mCheckMediaFileData, new CompressImageTask.OnImagesResult() {
                     @Override
                     public void startCompress() {
 

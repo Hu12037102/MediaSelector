@@ -4,17 +4,14 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 
 import com.example.item.weight.TitleView;
@@ -33,7 +30,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import utils.bean.ImageConfig;
@@ -208,12 +204,8 @@ public class PreviewActivity extends BaseActivity {
             @Override
             public void onSureClick(@NonNull View view) {
                 if (mCheckMediaData.size() > 0) {
-                    if (mOptions.isCompress) {
-                        List<ImageConfig> configData = new ArrayList<>();
-                        for (int i = 0; i < mCheckMediaData.size(); i++) {
-                            configData.add(MediaSelectorFile.thisToDefaultImageConfig(mCheckMediaData.get(i)));
-                        }
-                        coompressImage(configData, new CompressImageTask.OnImagesResult() {
+                    if (mOptions.isCompress && !mOptions.isShowVideo) {
+                        compressImage(mCheckMediaData, new CompressImageTask.OnImagesResult() {
                             @Override
                             public void startCompress() {
 

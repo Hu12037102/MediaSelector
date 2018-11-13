@@ -15,6 +15,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import utils.bean.ImageConfig;
@@ -72,7 +73,12 @@ public abstract class BaseActivity extends PermissionActivity {
             EventBus.getDefault().unregister(this);
         }
     }
-    protected void coompressImage(List<ImageConfig> configData,CompressImageTask.OnImagesResult onImagesResult){
+    protected void compressImage( List<MediaSelectorFile>mMediaFileData, CompressImageTask.OnImagesResult onImagesResult){
+        final List<ImageConfig> configData = new ArrayList<>();
+        for (int i = 0; i < mMediaFileData.size(); i++) {
+            configData.add(MediaSelectorFile.thisToDefaultImageConfig(mMediaFileData.get(i)));
+        }
+
         CompressImageTask.get().compressImages(this, configData,onImagesResult);
     }
 }
