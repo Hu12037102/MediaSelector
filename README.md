@@ -17,6 +17,7 @@ MediaSelector是一个针对于Android媒体库选择的框架，该风格完全
 
 ```java
 
+#### 使用依赖
 allprojects {
 		repositories {
 			...
