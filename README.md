@@ -9,7 +9,7 @@ MediaSelector是一个针对于Android媒体库选择的框架，该风格完全
 ### 运行效果预览【加载图片资源】
 ![压缩运行效果预览](./MediaSelectorGif.gif)
 
-### 运行效果预览【加载图片资源】
+### 运行效果预览【加载视频和图片资源】
 ![压缩运行效果预览](./MediaSelectorVideoGif.gif)
 
 ```java
