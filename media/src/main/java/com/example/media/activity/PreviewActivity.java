@@ -21,6 +21,7 @@ import com.example.media.R;
 import com.example.media.adapter.MediaCheckAdapter;
 import com.example.media.adapter.PreviewAdapter;
 import com.example.media.bean.MediaSelectorFile;
+import com.example.media.resolver.ActivityManger;
 import com.example.media.resolver.Contast;
 import com.example.media.utils.ScreenUtils;
 import com.example.media.weight.PreviewViewPager;
@@ -74,6 +75,9 @@ public class PreviewActivity extends BaseActivity {
     protected void initData() {
         Intent intent = getIntent();
         mCheckMediaData = intent.getParcelableArrayListExtra(Contast.KEY_PREVIEW_CHECK_MEDIA);
+        if (mCheckMediaData == null) {
+            mCheckMediaData = new ArrayList<>();
+        }
         mMediaFileData = intent.getParcelableArrayListExtra(Contast.KEY_PREVIEW_DATA_MEDIA);
         mPreviewPosition = intent.getIntExtra(Contast.KEY_PREVIEW_POSITION, 0);
         mOptions = intent.getParcelableExtra(Contast.KEY_OPEN_MEDIA);
@@ -203,38 +207,43 @@ public class PreviewActivity extends BaseActivity {
         mTvTop.setOnSureViewClickListener(new TitleView.OnSureViewClickListener() {
             @Override
             public void onSureClick(@NonNull View view) {
-                if (mCheckMediaData.size() > 0) {
-                    if (mOptions.isCompress && !mOptions.isShowVideo) {
-                        compressImage(mCheckMediaData, new CompressImageTask.OnImagesResult() {
-                            @Override
-                            public void startCompress() {
-
-                            }
-
-                            @Override
-                            public void resultFilesSucceed(List<File> list) {
-                                mCheckMediaData.clear();
-                                for (int i = 0; i < list.size(); i++) {
-                                    mCheckMediaData.add(MediaSelectorFile.checkFileToThis(list.get(i)));
-                                }
-                                EventBus.getDefault().post(mCheckMediaData);
-                                finish();
-                            }
-
-                            @Override
-                            public void resultFilesError() {
-
-                            }
-                        });
-                    } else {
-                        EventBus.getDefault().post(mCheckMediaData);
-                        finish();
-                    }
+                if (mCheckMediaData.size() <= 0) {
+                    mMediaFileData.get(mPreviewPosition).isCheck = true;
+                    mCheckMediaData.add(mMediaFileData.get(mPreviewPosition));
                 }
-
+                sureData();
 
             }
         });
+    }
+
+    private void sureData() {
+        if (mOptions.isCompress && !mOptions.isShowVideo) {
+            compressImage(mCheckMediaData, new CompressImageTask.OnImagesResult() {
+                @Override
+                public void startCompress() {
+
+                }
+
+                @Override
+                public void resultFilesSucceed(List<File> list) {
+                    mCheckMediaData.clear();
+                    for (int i = 0; i < list.size(); i++) {
+                        mCheckMediaData.add(MediaSelectorFile.checkFileToThis(list.get(i)));
+                    }
+                    EventBus.getDefault().post(mCheckMediaData);
+                    finish();
+                }
+
+                @Override
+                public void resultFilesError() {
+
+                }
+            });
+        } else {
+            EventBus.getDefault().post(mCheckMediaData);
+            finish();
+        }
     }
 
     @Override

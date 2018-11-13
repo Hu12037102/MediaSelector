@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             mData.addAll(0, mediaList);
             mDataAdapter.notifyDataSetChanged();
             for (int i = 0; i < mediaList.size(); i++) {
-                Log.w("onActivityResult----", mediaList.get(i).filePath);
+                Log.w("onActivityResult----", mediaList.get(i).filePath + mediaList.get(i).folderPath);
             }
 
         }
