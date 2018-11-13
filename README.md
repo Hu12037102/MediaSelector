@@ -13,8 +13,18 @@ MediaSelector是一个针对于Android媒体库选择的框架，该风格完全
 ### 运行效果预览【加载视频和图片资源】
 ![压缩运行效果预览](./MediaSelectorVideoGif.gif)
 
+
+
 ```java
 
+#### 使用依赖
+allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+ implementation 'com.github.Hu12037102:MediaSelector:0.0.1'
 
  /***
     *自定义选择图片方式
