@@ -26,6 +26,8 @@ MediaSelector是一个针对于Android媒体库选择的框架，该风格完全
  mediaOptions.isCompress = false;
  //是否要显示视频文件
  mediaOptions.isShowVideo = false;
+ //设置module主题
+ mediaOptions.themeColor = "#FF4081";
  //Activity中
  MediaSelector.with(MainActivity.this).setMediaOptions(mediaOptions).openMediaActivity();
   //Fragment中
