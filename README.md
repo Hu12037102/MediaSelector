@@ -1,13 +1,16 @@
 # MediaSelector
 MediaSelector是一个针对于Android媒体库选择的框架，该风格完全仿照微信风格！市面虽然有很多，但是我感觉庞大！
 所以自己动手封装一个！
-## 框架特点
+## 工具特点
 </br>1、自定义性扩展能力强（选择文件个数自定义；支持拍照展示）
 </br>2、支持多图压缩
 </br>3、两行代码解决所有问题，多一行算我输
-</br>4、日后把裁剪、视频都加上
-### 运行效果预览
+</br>4、支持加载视频资源（加载视频资源，不会压缩）
+### 运行效果预览【加载图片资源】
 ![压缩运行效果预览](./MediaSelectorGif.gif)
+
+### 运行效果预览【加载图片资源】
+![压缩运行效果预览](./MediaSelectorVideoGif.gif)
 
 ```java
 
@@ -20,7 +23,7 @@ MediaSelector是一个针对于Android媒体库选择的框架，该风格完全
  mediaOptions.isShowCamera = true;
  //是否要压缩
  mediaOptions.isCompress = false;
- //是否要显示视频文件（目前该版本没有加上该功能，日后期待）
+ //是否要显示视频文件
  mediaOptions.isShowVideo = false;
  //Activity中
  MediaSelector.with(MainActivity.this).setMediaOptions(mediaOptions).openMediaActivity();
