@@ -8,10 +8,12 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.VideoView;
 
 import com.example.media.MediaSelector;
 import com.example.media.OnRecyclerItemClickListener;
 import com.example.media.bean.MediaSelectorFile;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -64,9 +66,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                     MediaSelector.MediaOptions mediaOptions = new MediaSelector.MediaOptions();
                     mediaOptions.isShowCamera = true;
+                    mediaOptions.isShowVideo = true;
                     MediaSelector.with(MainActivity.this).setMediaOptions(mediaOptions).openMediaActivity();
 
-                MediaSelector.with(MainActivity.this).openMediaActivity();
                 }
             }
         });
@@ -74,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 选择图片结果回调
+     *
      * @param requestCode
      * @param resultCode
      * @param data

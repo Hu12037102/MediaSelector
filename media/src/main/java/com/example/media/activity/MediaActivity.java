@@ -160,7 +160,7 @@ public class MediaActivity extends BaseActivity {
             mMediaFileAdapter = new MediaFileAdapter(this, mMediaFileData);
             mRecyclerView.setAdapter(mMediaFileAdapter);
         }
-        mediaHelper.loadMedia(new ILoadMediaResult() {
+        mediaHelper.loadMedia(mOptions.isShowCamera,mOptions.isShowVideo, new ILoadMediaResult() {
             @Override
             public void mediaResult(List<MediaSelectorFolder> data) {
                 if (data != null && data.size() > 0) {
@@ -187,11 +187,6 @@ public class MediaActivity extends BaseActivity {
             if (mOptions.maxChooseMedia <= 0) {
                 mOptions.maxChooseMedia = 1;
             }
-        }
-        if (mOptions.isShowCamera) {
-            MediaSelectorFile cameraMediaFile = new MediaSelectorFile();
-            cameraMediaFile.isShowCamera = true;
-            mMediaFileData.add(cameraMediaFile);
         }
     }
 
@@ -399,9 +394,10 @@ public class MediaActivity extends BaseActivity {
 
     /**
      * 预览图片选择发送事件
+     *
      * @param mediaSelectorFile
      */
-    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void previewMediaResult(@NonNull MediaSelectorFile mediaSelectorFile) {
         if (mediaSelectorFile.isCheck) {
             //首先先判断选择的媒体库
@@ -425,9 +421,10 @@ public class MediaActivity extends BaseActivity {
 
     /**
      * 预览图片返回
+     *
      * @param checkMediaData
      */
-    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void resultCheckMediaData(@NonNull List<MediaSelectorFile> checkMediaData) {
         if (checkMediaData.size() > 0) {
             mCheckMediaFileData.clear();

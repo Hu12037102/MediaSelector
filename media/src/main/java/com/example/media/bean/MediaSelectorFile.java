@@ -21,6 +21,8 @@ public class MediaSelectorFile implements Parcelable {
     public String folderPath;
     public boolean isCheck;
     public boolean isShowCamera;
+    public boolean isVideo;
+    public long videoDuration;
 
     public MediaSelectorFile() {
     }
@@ -35,6 +37,8 @@ public class MediaSelectorFile implements Parcelable {
         folderPath = in.readString();
         isCheck = in.readByte() != 0;
         isShowCamera = in.readByte() != 0;
+        isVideo = in.readByte() != 0;
+        videoDuration = in.readLong();
     }
 
     public static final Creator<MediaSelectorFile> CREATOR = new Creator<MediaSelectorFile>() {
@@ -65,6 +69,8 @@ public class MediaSelectorFile implements Parcelable {
         dest.writeString(folderPath);
         dest.writeByte((byte) (isCheck ? 1 : 0));
         dest.writeByte((byte) (isShowCamera ? 1 : 0));
+        dest.writeByte((byte) (isVideo ? 1 : 0));
+        dest.writeLong(videoDuration);
     }
 
     @Override

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/iv_item"
@@ -13,4 +12,11 @@
         android:contentDescription="@string/selector"
         android:padding="2dp"
         android:src="@mipmap/icon_image_background" />
-</LinearLayout>
+    <ImageView
+        android:id="@+id/iv_media_type"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:src="@mipmap/icon_video_start"
+        android:layout_centerInParent="true"
+        />
+</RelativeLayout>

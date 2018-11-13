@@ -3,15 +3,18 @@ package com.example.media.activity;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 
 import com.example.item.weight.TitleView;
@@ -30,6 +33,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import utils.bean.ImageConfig;
@@ -82,6 +86,11 @@ public class PreviewActivity extends BaseActivity {
             finish();
             return;
         }
+        if (mMediaFileData.get(0).isShowCamera && mMediaFileData.get(0).filePath == null) {
+            mMediaFileData.remove(0);
+            mPreviewPosition--;
+        }
+
         if (mCheckMediaData != null && mCheckMediaData.size() > 0) {
             for (int i = 0; i < mCheckMediaData.size(); i++) {
                 if (!mMediaFileData.contains(mCheckMediaData.get(i))) {
@@ -142,6 +151,14 @@ public class PreviewActivity extends BaseActivity {
                 }
                 titleViewAnimation();
                 isShowTitleView = !isShowTitleView;
+            }
+        });
+        mPreviewAdapter.setOnPreviewVideoClickListener(new PreviewAdapter.OnPreviewVideoClickListener() {
+            @Override
+            public void onClickVideo(View view, int position) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse(mMediaFileData.get(position).filePath), "video/*");
+                startActivityForResult(intent, Contast.CODE_REQUEST_PRIVIEW_VIDEO);
             }
         });
         mCheckAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
@@ -258,5 +275,16 @@ public class PreviewActivity extends BaseActivity {
 
     }
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case 0:
+                if (requestCode == Contast.CODE_REQUEST_PRIVIEW_VIDEO && mPreviewAdapter.mCbPlay != null) {
+                    mPreviewAdapter.mCbPlay.setChecked(false);
+                    mPreviewAdapter.notifyDataSetChanged();
+                }
+                break;
+        }
+    }
 }

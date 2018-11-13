@@ -12,7 +12,10 @@ public interface Contast {
     String KEY_REQUEST_MEDIA_DATA = "key_request_media_data";
     int CODE_REQUEST_MEDIA = 1011;
     int CODE_RESULT_MEDIA = 1012;
+    int CODE_REQUEST_PRIVIEW_VIDEO = 1013;
     String ALL_FILE = "全部文件";
+    String ALL_VIDEO = "全部视频";
     int REQUEST_CAMERA_CODE = 2000;
+
 
 }

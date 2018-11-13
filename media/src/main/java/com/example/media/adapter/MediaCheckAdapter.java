@@ -38,7 +38,7 @@ public class MediaCheckAdapter extends RecyclerView.Adapter<MediaCheckAdapter.Vi
 
     public void removeItemNotifyData(int position) {
         mData.remove(position);
-         this.notifyDataSetChanged();
+        this.notifyDataSetChanged();
     }
 
     public void addItemNotifyData(@NonNull MediaSelectorFile previewMedia) {
@@ -54,6 +54,7 @@ public class MediaCheckAdapter extends RecyclerView.Adapter<MediaCheckAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
+        viewHolder.mIvMediaType.setVisibility(mData.get(i).isVideo ? View.VISIBLE : View.GONE);
         GlideUtils.loadImage(mContext, mData.get(i).filePath, viewHolder.mIvItem);
         viewHolder.mIvItem.setBackgroundResource(mPreviewMedia.filePath.equals(mData.get(i).filePath) ? R.drawable.shape_media_check : R.drawable.shape_media_uncheck);
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +83,7 @@ public class MediaCheckAdapter extends RecyclerView.Adapter<MediaCheckAdapter.Vi
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView mIvItem;
+        private ImageView mIvMediaType;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -90,6 +92,7 @@ public class MediaCheckAdapter extends RecyclerView.Adapter<MediaCheckAdapter.Vi
 
         private void initView(View itemView) {
             mIvItem = itemView.findViewById(R.id.iv_item);
+            mIvMediaType = itemView.findViewById(R.id.iv_media_type);
         }
     }
 }

@@ -10,12 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.item.util.ScreenUtils;
 import com.example.media.OnRecyclerItemClickListener;
 import com.example.media.R;
 import com.example.media.bean.MediaSelectorFile;
 import com.example.media.resolver.Contast;
+import com.example.media.utils.DateUtils;
 import com.example.media.utils.GlideUtils;
 
 import java.util.List;
@@ -23,8 +26,6 @@ import java.util.List;
 public class MediaFileAdapter extends RecyclerView.Adapter<MediaFileAdapter.ViewHolder> {
     private List<MediaSelectorFile> mData;
     private Context mContext;
-    private static final int CAMERA_VIEW_TYPE = -1;
-    private boolean isShowCamera;
 
     public void setOnCheckMediaListener(OnCheckMediaListener onCheckMediaListener) {
         this.onCheckMediaListener = onCheckMediaListener;
@@ -56,10 +57,10 @@ public class MediaFileAdapter extends RecyclerView.Adapter<MediaFileAdapter.View
         if (mData.get(i).isShowCamera) {
             layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
             layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-
             GlideUtils.loadImage(mContext, R.mipmap.icon_camera, viewHolder.mIvData);
             viewHolder.mIvCheck.setVisibility(View.GONE);
             viewHolder.mViewLay.setVisibility(View.GONE);
+            viewHolder.mRlVideo.setVisibility(View.GONE);
         } else {
             layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
             layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -67,6 +68,14 @@ public class MediaFileAdapter extends RecyclerView.Adapter<MediaFileAdapter.View
             GlideUtils.loadImage(mContext, mData.get(i).filePath, viewHolder.mIvData);
             viewHolder.mIvCheck.setImageResource(mData.get(i).isCheck ? R.mipmap.icon_image_checked : R.mipmap.icon_image_unchecked);
             viewHolder.mViewLay.setVisibility(mData.get(i).isCheck ? View.VISIBLE : View.GONE);
+
+            if (mData.get(i).isVideo) {
+                viewHolder.mRlVideo.setVisibility(View.VISIBLE);
+                viewHolder.mTvDuration.setText(DateUtils.videoDuration(mData.get(i).videoDuration));
+            } else {
+                viewHolder.mRlVideo.setVisibility(View.GONE);
+            }
+
         }
         viewHolder.mIvData.setLayoutParams(layoutParams);
 
@@ -91,12 +100,7 @@ public class MediaFileAdapter extends RecyclerView.Adapter<MediaFileAdapter.View
 
     @Override
     public int getItemCount() {
-        if (mData == null || mData.size() == 0)
-            return 0;
-        if (isShowCamera) {
-            return mData.size() + 1;
-        }
-        return mData.size();
+        return mData == null ? 0 : mData.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -104,6 +108,8 @@ public class MediaFileAdapter extends RecyclerView.Adapter<MediaFileAdapter.View
         private ImageView mIvData;
         private ImageView mIvCheck;
         private View mViewLay;
+        private RelativeLayout mRlVideo;
+        private TextView mTvDuration;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -115,6 +121,8 @@ public class MediaFileAdapter extends RecyclerView.Adapter<MediaFileAdapter.View
             mIvData = itemView.findViewById(R.id.iv_data);
             mIvCheck = itemView.findViewById(R.id.iv_check);
             mViewLay = itemView.findViewById(R.id.view_lay);
+            mRlVideo = itemView.findViewById(R.id.rl_video);
+            mTvDuration = itemView.findViewById(R.id.tv_duration);
             MediaFileAdapter.setRootGroupParams(mRootGroup);
         }
     }

@@ -1,16 +1,27 @@
 package com.example.media.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.MediaController;
+import android.widget.VideoView;
 
+import com.example.media.R;
 import com.example.media.bean.MediaSelectorFile;
 import com.example.media.utils.GlideUtils;
 import com.example.media.utils.ScreenUtils;
+import com.example.media.weight.Toasts;
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
 
@@ -20,12 +31,19 @@ public class PreviewAdapter extends PagerAdapter {
 
     private int mChildCount;
     private List<MediaSelectorFile> mData;
+    public CheckBox mCbPlay;
 
     public void setOnPreviewViewClickListener(OnPreviewViewClickListener onPreviewViewClickListener) {
         this.onPreviewViewClickListener = onPreviewViewClickListener;
     }
 
     private OnPreviewViewClickListener onPreviewViewClickListener;
+
+    public void setOnPreviewVideoClickListener(OnPreviewVideoClickListener onPreviewVideoClickListener) {
+        this.onPreviewVideoClickListener = onPreviewVideoClickListener;
+    }
+
+    private OnPreviewVideoClickListener onPreviewVideoClickListener;
 
     public PreviewAdapter(List<MediaSelectorFile> data) {
         this.mData = data;
@@ -58,14 +76,45 @@ public class PreviewAdapter extends PagerAdapter {
 
     @NonNull
     @Override
-    public PhotoView instantiateItem(@NonNull final ViewGroup container, int position) {
-        PhotoView photoView = new PhotoView(container.getContext());
-        container.addView(photoView);
-        ViewGroup.LayoutParams layoutParams = photoView.getLayoutParams();
-        layoutParams.width = ScreenUtils.screenWidth(container.getContext());
-        layoutParams.height = ScreenUtils.screenHeight(container.getContext());
-        photoView.setLayoutParams(layoutParams);
-        GlideUtils.loadImage(container.getContext(), mData.get(position).filePath, photoView);
+    public Object instantiateItem(@NonNull final ViewGroup container, final int position) {
+        if (mData.get(position).isVideo) {
+            View inflate = LayoutInflater.from(container.getContext()).inflate(R.layout.item_video_play_view, container, false);
+            container.addView(inflate);
+
+            final PhotoView pTData = inflate.findViewById(R.id.pt_data);
+            mCbPlay = inflate.findViewById(R.id.cb_play);
+            ViewGroup.LayoutParams layoutParams = pTData.getLayoutParams();
+            layoutParams.width = ScreenUtils.screenWidth(container.getContext());
+            layoutParams.height = ScreenUtils.screenHeight(container.getContext());
+            pTData.setLayoutParams(layoutParams);
+            GlideUtils.loadImage(container.getContext(), mData.get(position).filePath, pTData);
+            mCbPlay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked && onPreviewVideoClickListener !=null) {
+                        onPreviewVideoClickListener.onClickVideo(mCbPlay,position);
+
+                    }
+                }
+            });
+            clickPhotoView(pTData);
+
+            return inflate;
+        } else {
+            PhotoView photoView = new PhotoView(container.getContext());
+            container.addView(photoView);
+            ViewGroup.LayoutParams layoutParams = photoView.getLayoutParams();
+            layoutParams.width = ScreenUtils.screenWidth(container.getContext());
+            layoutParams.height = ScreenUtils.screenHeight(container.getContext());
+            photoView.setLayoutParams(layoutParams);
+            GlideUtils.loadImage(container.getContext(), mData.get(position).filePath, photoView);
+            clickPhotoView(photoView);
+            return photoView;
+        }
+
+    }
+
+    private void clickPhotoView(@NonNull PhotoView photoView) {
         photoView.setOnPhotoTapListener(new OnPhotoTapListener() {
             @Override
             public void onPhotoTap(ImageView view, float x, float y) {
@@ -74,9 +123,8 @@ public class PreviewAdapter extends PagerAdapter {
                 }
             }
         });
-
-        return photoView;
     }
+
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
@@ -102,5 +150,9 @@ public class PreviewAdapter extends PagerAdapter {
 
     public interface OnPreviewViewClickListener {
         void onPreviewView(View view);
+    }
+
+    public interface OnPreviewVideoClickListener {
+        void onClickVideo(View view, int position);
     }
 }

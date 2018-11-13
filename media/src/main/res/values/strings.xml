@@ -17,5 +17,6 @@
     <string name="memory_card">储存卡</string>
     <string name="not_gain_media_photo">没有获取到照片</string>
     <string name="compress_image_fail">压缩图片失败</string>
+    <string name="this_video_format_not_supported">该视频格式不支持</string>
 
 </resources>

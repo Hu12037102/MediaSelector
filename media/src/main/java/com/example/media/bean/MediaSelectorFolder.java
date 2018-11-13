@@ -8,13 +8,16 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MediaSelectorFolder implements Parcelable{
+public class MediaSelectorFolder implements Parcelable {
     public String folderName;
     public String folderPath;
     public List<MediaSelectorFile> fileData = new ArrayList<>();
     public boolean isCheck;
     public String firstFilePath;
-    public MediaSelectorFolder(){}
+    public boolean isAllVideo;
+
+    public MediaSelectorFolder() {
+    }
 
     protected MediaSelectorFolder(Parcel in) {
         folderName = in.readString();
@@ -22,6 +25,7 @@ public class MediaSelectorFolder implements Parcelable{
         fileData = in.createTypedArrayList(MediaSelectorFile.CREATOR);
         isCheck = in.readByte() != 0;
         firstFilePath = in.readString();
+        isAllVideo = in.readByte() != 0;
     }
 
     public static final Creator<MediaSelectorFolder> CREATOR = new Creator<MediaSelectorFolder>() {
@@ -38,6 +42,7 @@ public class MediaSelectorFolder implements Parcelable{
 
     /**
      * 判断文件夹的路径是否一致判断是否相等
+     *
      * @param obj
      * @return
      */
@@ -65,5 +70,6 @@ public class MediaSelectorFolder implements Parcelable{
         dest.writeTypedList(fileData);
         dest.writeByte((byte) (isCheck ? 1 : 0));
         dest.writeString(firstFilePath);
+        dest.writeByte((byte) (isAllVideo ? 1 : 0));
     }
 }
