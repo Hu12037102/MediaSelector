@@ -72,6 +72,11 @@ public class MediaActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected int getThemeColor() {
+        return mOptions.themeColor;
+    }
+
     private void requestExternalStoragePermission() {
         requestPermission(new OnPermissionsResult() {
             @Override
@@ -189,9 +194,8 @@ public class MediaActivity extends BaseActivity {
             if (mOptions.maxChooseMedia <= 0) {
                 mOptions.maxChooseMedia = 1;
             }
-            mTvTop.mViewRoot.setBackgroundColor(Color.parseColor(mOptions.themeColor));
-            mTvBottom.mViewRoot.setBackgroundColor(Color.parseColor(mOptions.themeColor));
-            mSystemBarTintManager.setStatusBarTintColor(Color.parseColor(mOptions.themeColor));
+            mTvTop.mViewRoot.setBackgroundColor(ContextCompat.getColor(this,mOptions.themeColor));
+            mTvBottom.mViewRoot.setBackgroundColor(ContextCompat.getColor(this,mOptions.themeColor));
         }
 
     }

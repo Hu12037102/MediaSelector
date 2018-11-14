@@ -2,6 +2,7 @@ package com.example.media.activity;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.WindowManager;
@@ -24,6 +25,8 @@ import utils.task.CompressImageTask;
 public abstract class BaseActivity extends PermissionActivity {
 
     protected SystemBarTintManager mSystemBarTintManager;
+    private @ColorRes
+    int mThemeColor = R.color.colorTheme;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,16 +41,20 @@ public abstract class BaseActivity extends PermissionActivity {
 
     protected void initPermission() {
         ActivityManger.get().addActivity(this);
-        initUI();
         initView();
         initData();
         initEvent();
+        initUI();
+    }
+
+    protected int getThemeColor() {
+        return mThemeColor;
     }
 
     protected void initUI() {
         mSystemBarTintManager = new SystemBarTintManager(this);
         mSystemBarTintManager.setStatusBarTintEnabled(true);
-        mSystemBarTintManager.setStatusBarTintColor(ContextCompat.getColor(this, R.color.colorTheme));
+        mSystemBarTintManager.setStatusBarTintColor(ContextCompat.getColor(this, getThemeColor()));
     }
 
     @Override
@@ -76,12 +83,13 @@ public abstract class BaseActivity extends PermissionActivity {
             EventBus.getDefault().unregister(this);
         }
     }
-    protected void compressImage( List<MediaSelectorFile>mMediaFileData, CompressImageTask.OnImagesResult onImagesResult){
+
+    protected void compressImage(List<MediaSelectorFile> mMediaFileData, CompressImageTask.OnImagesResult onImagesResult) {
         final List<ImageConfig> configData = new ArrayList<>();
         for (int i = 0; i < mMediaFileData.size(); i++) {
             configData.add(MediaSelectorFile.thisToDefaultImageConfig(mMediaFileData.get(i)));
         }
 
-        CompressImageTask.get().compressImages(this, configData,onImagesResult);
+        CompressImageTask.get().compressImages(this, configData, onImagesResult);
     }
 }

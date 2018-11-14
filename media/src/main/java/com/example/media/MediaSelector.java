@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 
@@ -70,7 +71,7 @@ public class MediaSelector {
         public boolean isCompress;
         public boolean isShowCamera;
         public boolean isShowVideo;
-        public String themeColor = "#FF303030";
+        public @ColorRes int themeColor = R.color.colorTheme;
 
 
         protected MediaOptions(Parcel in) {
@@ -78,7 +79,7 @@ public class MediaSelector {
             isCompress = in.readByte() != 0;
             isShowCamera = in.readByte() != 0;
             isShowVideo = in.readByte() != 0;
-            themeColor = in.readString();
+            themeColor = in.readInt();
         }
 
         public static final Creator<MediaOptions> CREATOR = new Creator<MediaOptions>() {
@@ -104,7 +105,7 @@ public class MediaSelector {
             dest.writeByte((byte) (isCompress ? 1 : 0));
             dest.writeByte((byte) (isShowCamera ? 1 : 0));
             dest.writeByte((byte) (isShowVideo ? 1 : 0));
-            dest.writeString(themeColor);
+            dest.writeInt(themeColor);
         }
     }
 
