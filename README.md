@@ -13,6 +13,9 @@ MediaSelector是一个针对于Android媒体库选择的框架，该风格完全
 ### 运行效果预览【加载视频和图片资源】
 ![压缩运行效果预览](./MediaSelectorVideoGif.gif)
 
+### 运行效果预览【加载剪切图片资源】
+![压缩运行效果预览](./MediaSelectorCropGif.gif)
+
 
 
 ```java
@@ -37,7 +40,9 @@ allprojects {
  //是否要显示视频文件
  mediaOptions.isShowVideo = false;
  //设置module主题
- mediaOptions.themeColor = "#FF4081";
+ mediaOptions.themeColor = R.color.colorAccent;
+ //设置要不要裁剪（视频不裁剪、单图选择接受裁剪，裁剪大小自己可以设置）
+  mediaOptions.isCrop = true;
  //Activity中
  MediaSelector.with(MainActivity.this).setMediaOptions(mediaOptions).openMediaActivity();
   //Fragment中
