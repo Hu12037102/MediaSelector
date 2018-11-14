@@ -71,7 +71,7 @@ public class MediaHelper {
 
                 mediaFile.filePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA));
                 if (TextUtils.isEmpty(mediaFile.fileName) || TextUtils.isEmpty(mediaFile.filePath)
-                        || TextUtils.getTrimmedLength(mediaFile.fileName) == 0 || TextUtils.getTrimmedLength(mediaFile.filePath) == 0) {
+                        || TextUtils.getTrimmedLength(mediaFile.fileName) == 0 || TextUtils.getTrimmedLength(mediaFile.filePath) == 0 || mediaFile.fileName.endsWith(".gif")) {
                     continue;
                 }
                 mediaFile.fileSize = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.SIZE));

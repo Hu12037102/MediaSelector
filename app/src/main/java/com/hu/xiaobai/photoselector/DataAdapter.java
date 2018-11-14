@@ -28,7 +28,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
     private OnRecyclerItemClickListener onRecyclerItemClickListener;
 
-    public DataAdapter(@NonNull Context context, @NonNull List<MediaSelectorFile> data) {
+    public DataAdapter( Context context, @NonNull List<MediaSelectorFile> data) {
         this.mContext = context;
         this.mData = data;
     }
