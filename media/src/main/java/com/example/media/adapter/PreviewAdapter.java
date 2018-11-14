@@ -87,7 +87,7 @@ public class PreviewAdapter extends PagerAdapter {
             layoutParams.width = ScreenUtils.screenWidth(container.getContext());
             layoutParams.height = ScreenUtils.screenHeight(container.getContext());
             pTData.setLayoutParams(layoutParams);
-            GlideUtils.loadImage(container.getContext(), mData.get(position).filePath, pTData);
+            GlideUtils.loadImage(container.getContext(), mData.get(position).filePath, pTData,false);
             mCbPlay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -107,7 +107,7 @@ public class PreviewAdapter extends PagerAdapter {
             layoutParams.width = ScreenUtils.screenWidth(container.getContext());
             layoutParams.height = ScreenUtils.screenHeight(container.getContext());
             photoView.setLayoutParams(layoutParams);
-            GlideUtils.loadImage(container.getContext(), mData.get(position).filePath, photoView);
+            GlideUtils.loadImage(container.getContext(), mData.get(position).filePath, photoView,false);
             clickPhotoView(photoView);
             return photoView;
         }
