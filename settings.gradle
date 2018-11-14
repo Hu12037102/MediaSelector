@@ -1,1 +1,1 @@
-include ':app', ':media',':ucrop'
+include ':app', ':media'

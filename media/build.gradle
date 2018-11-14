@@ -40,7 +40,7 @@ dependencies {
     implementation files('libs/systembartint-1.0.4.jar')
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'com.github.Hu12037102.ImageCompress:compress:2.0.9'
-    implementation project(':ucrop')
+    implementation 'com.github.yalantis:ucrop:2.2.2'
 }
 allprojects {
     repositories {
