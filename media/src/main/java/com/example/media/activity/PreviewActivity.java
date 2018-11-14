@@ -10,11 +10,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.item.weight.TitleView;
 import com.example.media.MediaSelector;
@@ -25,9 +27,11 @@ import com.example.media.adapter.PreviewAdapter;
 import com.example.media.bean.MediaSelectorFile;
 import com.example.media.resolver.ActivityManger;
 import com.example.media.resolver.Contast;
+import com.example.media.utils.FileUtils;
 import com.example.media.utils.ScreenUtils;
 import com.example.media.weight.PreviewViewPager;
 import com.example.media.weight.Toasts;
+import com.yalantis.ucrop.UCrop;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -84,7 +88,7 @@ public class PreviewActivity extends BaseActivity {
         mMediaFileData = intent.getParcelableArrayListExtra(Contast.KEY_PREVIEW_DATA_MEDIA);
         mPreviewPosition = intent.getIntExtra(Contast.KEY_PREVIEW_POSITION, 0);
         mOptions = intent.getParcelableExtra(Contast.KEY_OPEN_MEDIA);
-        mTvTop.mViewRoot.setBackgroundColor(ContextCompat.getColor(this,mOptions.themeColor));
+        mTvTop.mViewRoot.setBackgroundColor(ContextCompat.getColor(this, mOptions.themeColor));
         if (mMediaFileData == null || mMediaFileData.size() == 0) {
             Toasts.with().showToast(this, "没有预览媒体库文件");
             finish();
@@ -222,7 +226,7 @@ public class PreviewActivity extends BaseActivity {
     }
 
     private void sureData() {
-        if (mOptions.isCompress && !mOptions.isShowVideo) {
+        if (mOptions.isCompress && !mOptions.isShowVideo && !mOptions.isCrop) {
             compressImage(mCheckMediaData, new CompressImageTask.OnImagesResult() {
                 @Override
                 public void startCompress() {
@@ -245,8 +249,26 @@ public class PreviewActivity extends BaseActivity {
                 }
             });
         } else {
-            EventBus.getDefault().post(mCheckMediaData);
-            finish();
+            if (mOptions.isCrop && mOptions.maxChooseMedia == 1) {
+                if (!mCheckMediaData.get(0).isVideo) {
+                    UCrop.Options options = new UCrop.Options();
+                    options.setCompressionQuality(100);
+                    options.setToolbarColor(ContextCompat.getColor(this, mOptions.themeColor));
+                    options.setStatusBarColor(ContextCompat.getColor(this, mOptions.themeColor));
+                    options.setLogoColor(ContextCompat.getColor(this, mOptions.themeColor));
+                    options.setActiveWidgetColor(ContextCompat.getColor(this, mOptions.themeColor));
+                    UCrop.of(Uri.fromFile(new File(mCheckMediaData.get(0).filePath)), Uri.fromFile(FileUtils.resultImageFile(this, "Crop")))
+                            .withAspectRatio(mOptions.scaleX, mOptions.scaleY)
+                            .withMaxResultSize(mOptions.cropWidth, mOptions.cropHeight)
+                            .withOptions(options)
+                            .start(this);
+                } else {
+                    Toasts.with().showToast(this, R.string.video_not_crop);
+                }
+            } else {
+                EventBus.getDefault().post(mCheckMediaData);
+                finish();
+            }
         }
     }
 
@@ -291,6 +313,32 @@ public class PreviewActivity extends BaseActivity {
                     mPreviewAdapter.mCbPlay.setChecked(false);
                     mPreviewAdapter.notifyDataSetChanged();
                 }
+            case RESULT_OK:
+                if (requestCode == UCrop.REQUEST_CROP) {
+                    if (data == null) {
+                        return;
+                    }
+                    final Uri resultUri = UCrop.getOutput(data);
+                    if (resultUri != null && resultUri.getPath() != null) {
+                        mCheckMediaData.clear();
+                        File file = new File(resultUri.getPath());
+                        if (FileUtils.existsFile(file.getAbsolutePath())) {
+                            mCheckMediaData.add(MediaSelectorFile.checkFileToThis(file));
+                            EventBus.getDefault().post(mCheckMediaData);
+                            finish();
+                        } else {
+                            Toasts.with().showToast(this, R.string.file_not_exit, Toast.LENGTH_SHORT);
+                        }
+                    }
+
+                }
+                break;
+            case UCrop.RESULT_ERROR:
+                if (requestCode == UCrop.REQUEST_CROP) {
+                    Toasts.with().showToast(this, R.string.crop_image_fail);
+                }
+                break;
+            default:
                 break;
         }
     }

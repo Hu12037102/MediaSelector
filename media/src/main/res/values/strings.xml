@@ -18,5 +18,8 @@
     <string name="not_gain_media_photo">没有获取到照片</string>
     <string name="compress_image_fail">压缩图片失败</string>
     <string name="this_video_format_not_supported">该视频格式不支持</string>
+    <string name="crop_image_fail">裁剪图片失败</string>
+    <string name="video_not_crop">视频不支持裁剪</string>
+    <string name="file_not_exit">文件不存在</string>
 
 </resources>

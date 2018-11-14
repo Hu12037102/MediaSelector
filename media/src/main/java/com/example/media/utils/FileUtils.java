@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class FileUtils {
 
-    public static final String FILE_DIRECTOR_NAME = "HuXiaobai/Camera";
+    public static final String FILE_DIRECTOR_NAME = "MediaSelector";
 
     /**
      * 获取父文件夹名字
@@ -61,10 +61,21 @@ public class FileUtils {
         return false;
     }
 
-    public static File outFileDirectory(Context context) {
+    public static File outCameraFileDirectory(Context context) {
         String storageState = Environment.getExternalStorageState();
         File rootFile = storageState.equals(Environment.MEDIA_MOUNTED) ? Environment.getExternalStorageDirectory() : context.getCacheDir();
-        rootFile = new File(rootFile.getAbsolutePath(), FILE_DIRECTOR_NAME);
+        rootFile = new File(rootFile.getAbsolutePath(), FILE_DIRECTOR_NAME.concat("/Camera"));
+        if (!rootFile.exists() || !rootFile.isDirectory()) {
+            rootFile.mkdirs();
+        }
+        return rootFile;
+    }
+
+
+    public static File outFileDirectory(Context context, String folderName) {
+        String storageState = Environment.getExternalStorageState();
+        File rootFile = storageState.equals(Environment.MEDIA_MOUNTED) ? Environment.getExternalStorageDirectory() : context.getCacheDir();
+        rootFile = new File(rootFile.getAbsolutePath(), FILE_DIRECTOR_NAME.concat("/").concat(folderName));
         if (!rootFile.exists() || !rootFile.isDirectory()) {
             rootFile.mkdirs();
         }
@@ -72,7 +83,11 @@ public class FileUtils {
     }
 
     public static File resultImageFile(Context context) {
-        return new File(outFileDirectory(context).getAbsolutePath(), "hxb" + System.currentTimeMillis() + ".jpg");
+        return new File(outCameraFileDirectory(context).getAbsolutePath(), "hxb" + System.currentTimeMillis() + ".jpg");
+    }
+
+    public static File resultImageFile(Context context, String folderName) {
+        return new File(outFileDirectory(context, folderName).getAbsolutePath(), "crop" + System.currentTimeMillis() + ".jpg");
     }
 
     public static Uri fileToUri(@NonNull Context context, @NonNull File file, @NonNull Intent intent) {

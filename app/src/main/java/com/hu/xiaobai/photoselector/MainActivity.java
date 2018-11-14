@@ -69,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
                     mediaOptions.isShowVideo = true;
                     mediaOptions.isCompress = true;
                     mediaOptions.maxChooseMedia = 1;
-                    mediaOptions.themeColor = R.color.colorAccent;
+                    mediaOptions.isCrop = true;
+                 //   mediaOptions.themeColor = R.color.colorAccent;
                     MediaSelector.with(MainActivity.this).setMediaOptions(mediaOptions).openMediaActivity();
 
                 }

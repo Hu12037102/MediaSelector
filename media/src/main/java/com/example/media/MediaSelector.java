@@ -47,19 +47,19 @@ public class MediaSelector {
             Activity activity = mSoftActivity.get();
             Intent intent = new Intent(activity, MediaActivity.class);
             intent.putExtra(Contast.KEY_OPEN_MEDIA, mMediaOptions);
-            activity.startActivityForResult(intent,Contast.CODE_REQUEST_MEDIA);
+            activity.startActivityForResult(intent, Contast.CODE_REQUEST_MEDIA);
         } else if (mSoftFragment != null && mSoftFragment.get() != null) {
             Fragment fragment = mSoftFragment.get();
             Intent intent = new Intent(fragment.getContext(), MediaActivity.class);
             intent.putExtra(Contast.KEY_OPEN_MEDIA, mMediaOptions);
-            fragment.startActivityForResult(intent,Contast.CODE_REQUEST_MEDIA);
+            fragment.startActivityForResult(intent, Contast.CODE_REQUEST_MEDIA);
         }
     }
 
-    public static List<MediaSelectorFile> resultMediaFile( Intent data){
+    public static List<MediaSelectorFile> resultMediaFile(Intent data) {
         if (data == null)
             return null;
-       return data.getParcelableArrayListExtra(Contast.KEY_REQUEST_MEDIA_DATA);
+        return data.getParcelableArrayListExtra(Contast.KEY_REQUEST_MEDIA_DATA);
     }
 
 
@@ -71,7 +71,13 @@ public class MediaSelector {
         public boolean isCompress;
         public boolean isShowCamera;
         public boolean isShowVideo;
-        public @ColorRes int themeColor = R.color.colorTheme;
+        public @ColorRes
+        int themeColor = R.color.colorTheme;
+        public boolean isCrop;
+        public int scaleX = 1;
+        public int scaleY = 1;
+        public int cropWidth = 720;
+        public int cropHeight = 720;
 
 
         protected MediaOptions(Parcel in) {
@@ -80,6 +86,11 @@ public class MediaSelector {
             isShowCamera = in.readByte() != 0;
             isShowVideo = in.readByte() != 0;
             themeColor = in.readInt();
+            isCrop = in.readByte() != 0;
+            scaleX = in.readInt();
+            scaleY = in.readInt();
+            cropWidth = in.readInt();
+            cropHeight = in.readInt();
         }
 
         public static final Creator<MediaOptions> CREATOR = new Creator<MediaOptions>() {
@@ -106,6 +117,11 @@ public class MediaSelector {
             dest.writeByte((byte) (isShowCamera ? 1 : 0));
             dest.writeByte((byte) (isShowVideo ? 1 : 0));
             dest.writeInt(themeColor);
+            dest.writeByte((byte) (isCrop ? 1 : 0));
+            dest.writeInt(scaleX);
+            dest.writeInt(scaleY);
+            dest.writeInt(cropWidth);
+            dest.writeInt(cropHeight);
         }
     }
 
