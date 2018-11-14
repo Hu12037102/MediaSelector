@@ -159,7 +159,7 @@ public class MediaActivity extends BaseActivity {
 
         if (mMediaFileAdapter == null) {
 
-            mMediaFileAdapter = new MediaFileAdapter(this, mMediaFileData);
+            mMediaFileAdapter = new MediaFileAdapter(this, mMediaFileData,mOptions);
             mRecyclerView.setAdapter(mMediaFileAdapter);
         }
         mediaHelper.loadMedia(mOptions.isShowCamera, mOptions.isShowVideo, new ILoadMediaResult() {

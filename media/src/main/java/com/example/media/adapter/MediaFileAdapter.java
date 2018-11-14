@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.item.util.ScreenUtils;
+import com.example.media.MediaSelector;
 import com.example.media.OnRecyclerItemClickListener;
 import com.example.media.R;
 import com.example.media.bean.MediaSelectorFile;
@@ -26,6 +27,7 @@ import java.util.List;
 public class MediaFileAdapter extends RecyclerView.Adapter<MediaFileAdapter.ViewHolder> {
     private List<MediaSelectorFile> mData;
     private Context mContext;
+    private MediaSelector.MediaOptions mOptions;
 
     public void setOnCheckMediaListener(OnCheckMediaListener onCheckMediaListener) {
         this.onCheckMediaListener = onCheckMediaListener;
@@ -39,9 +41,10 @@ public class MediaFileAdapter extends RecyclerView.Adapter<MediaFileAdapter.View
 
     private OnRecyclerItemClickListener onRecyclerItemClickListener;
 
-    public MediaFileAdapter(@NonNull Context context, List<MediaSelectorFile> data) {
+    public MediaFileAdapter(@NonNull Context context, @NonNull List<MediaSelectorFile> data, @NonNull MediaSelector.MediaOptions options) {
         this.mContext = context;
         this.mData = data;
+        this.mOptions = options;
     }
 
 
@@ -64,7 +67,7 @@ public class MediaFileAdapter extends RecyclerView.Adapter<MediaFileAdapter.View
         } else {
             layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
             layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-            viewHolder.mIvCheck.setVisibility(View.VISIBLE);
+            viewHolder.mIvCheck.setVisibility(mOptions.maxChooseMedia > 1 ? View.VISIBLE : View.GONE);
             GlideUtils.loadImage(mContext, mData.get(i).filePath, viewHolder.mIvData);
             viewHolder.mIvCheck.setImageResource(mData.get(i).isCheck ? R.mipmap.icon_image_checked : R.mipmap.icon_image_unchecked);
             viewHolder.mViewLay.setVisibility(mData.get(i).isCheck ? View.VISIBLE : View.GONE);
@@ -76,8 +79,9 @@ public class MediaFileAdapter extends RecyclerView.Adapter<MediaFileAdapter.View
                 viewHolder.mRlVideo.setVisibility(View.GONE);
             }
 
+
         }
-        viewHolder.mIvData.setLayoutParams(layoutParams);
+         viewHolder.mIvData.setLayoutParams(layoutParams);
 
         viewHolder.mIvCheck.setOnClickListener(new View.OnClickListener() {
             @Override
