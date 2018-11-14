@@ -27,7 +27,7 @@ allprojects {
 			maven { url 'https://jitpack.io' }
 		}
 	}
- implementation 'com.github.Hu12037102:MediaSelector:1.0.0'
+ implementation 'com.github.Hu12037102:MediaSelector:1.0.1'
 
  /***
     *自定义选择图片方式
