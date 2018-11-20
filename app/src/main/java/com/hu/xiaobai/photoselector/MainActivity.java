@@ -13,6 +13,7 @@ import android.widget.VideoView;
 import com.example.media.MediaSelector;
 import com.example.media.OnRecyclerItemClickListener;
 import com.example.media.bean.MediaSelectorFile;
+import com.example.media.resolver.Contast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                     mediaOptions.isCompress = true;
                     mediaOptions.maxChooseMedia = 1;
                     mediaOptions.isCrop = true;
-                 //   mediaOptions.themeColor = R.color.colorAccent;
+                    //   mediaOptions.themeColor = R.color.colorAccent;
                     MediaSelector.with(MainActivity.this).setMediaOptions(mediaOptions).openMediaActivity();
 
                 }
@@ -88,15 +89,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        List<MediaSelectorFile> mediaList = MediaSelector.resultMediaFile(data);
 
-        if (mediaList != null && mediaList.size() > 0) {
-            mData.addAll(0, mediaList);
-            mDataAdapter.notifyDataSetChanged();
-            for (int i = 0; i < mediaList.size(); i++) {
-                Log.w("onActivityResult----", mediaList.get(i).filePath + mediaList.get(i).folderPath);
+        if (resultCode == Contast.CODE_RESULT_MEDIA && requestCode == Contast.CODE_REQUEST_MEDIA) {
+            List<MediaSelectorFile> mediaList = MediaSelector.resultMediaFile(data);
+            if (mediaList != null && mediaList.size() > 0) {
+                mData.addAll(0, mediaList);
+                mDataAdapter.notifyDataSetChanged();
+                for (int i = 0; i < mediaList.size(); i++) {
+                    Log.w("onActivityResult----", mediaList.get(i).filePath + mediaList.get(i).folderPath);
+                }
+
             }
-
         }
     }
 

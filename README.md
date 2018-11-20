@@ -62,15 +62,12 @@ allprojects {
        * @param resultCode
        * @param data
        */
-      @Override
-      public void onActivityResult(int requestCode, int resultCode, Intent data) {
-          super.onActivityResult(requestCode, resultCode, data);
-          //具体重写这行代码即可
-          List<MediaSelectorFile> mediaList = MediaSelector.resultMediaFile(data);
+    @Override
+       public void onActivityResult(int requestCode, int resultCode, Intent data) {
+           super.onActivityResult(requestCode, resultCode, data);
 
-          if (mediaList != null && mediaList.size() > 0) {
-              mData.addAll(0, mediaList);
-              mDataAdapter.notifyDataSetChanged();
+           if (resultCode == Contast.CODE_RESULT_MEDIA && requestCode == Contast.CODE_REQUEST_MEDIA) {
+               List<MediaSelectorFile> mediaList = MediaSelector.resultMediaFile(data);
 
-          }
-      }
+           }
+       }
