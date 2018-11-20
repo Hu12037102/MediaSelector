@@ -17,6 +17,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.item.weight.TitleView;
@@ -165,7 +166,7 @@ public class MediaActivity extends BaseActivity {
 
         if (mMediaFileAdapter == null) {
 
-            mMediaFileAdapter = new MediaFileAdapter(this, mMediaFileData,mOptions);
+            mMediaFileAdapter = new MediaFileAdapter(this, mMediaFileData, mOptions);
             mRecyclerView.setAdapter(mMediaFileAdapter);
         }
         mediaHelper.loadMedia(mOptions.isShowCamera, mOptions.isShowVideo, new ILoadMediaResult() {
@@ -195,8 +196,8 @@ public class MediaActivity extends BaseActivity {
             if (mOptions.maxChooseMedia <= 0) {
                 mOptions.maxChooseMedia = 1;
             }
-            mTvTop.mViewRoot.setBackgroundColor(ContextCompat.getColor(this,mOptions.themeColor));
-            mTvBottom.mViewRoot.setBackgroundColor(ContextCompat.getColor(this,mOptions.themeColor));
+            mTvTop.mViewRoot.setBackgroundColor(ContextCompat.getColor(this, mOptions.themeColor));
+            mTvBottom.mViewRoot.setBackgroundColor(ContextCompat.getColor(this, mOptions.themeColor));
         }
 
     }
@@ -267,7 +268,11 @@ public class MediaActivity extends BaseActivity {
                 if (mMediaFileData.get(position).isShowCamera) {
                     openCamera();
                 } else {
-                    toPreviewActivity(position, mMediaFileData, mCheckMediaFileData);
+                    if (mOptions.isCrop && mOptions.maxChooseMedia == 1 && mOptions.isShowVideo && mMediaFileData.get(position).isVideo) {
+                        Toasts.with().showToast(MediaActivity.this, R.string.video_not_crop, Toast.LENGTH_SHORT);
+                    } else {
+                        toPreviewActivity(position, mMediaFileData, mCheckMediaFileData);
+                    }
                 }
             }
         });
