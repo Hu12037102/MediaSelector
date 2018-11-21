@@ -76,7 +76,6 @@ public class MediaFragment extends Fragment {
                     }
                     MediaSelector.MediaOptions mediaOptions = new MediaSelector.MediaOptions();
                     mediaOptions.isCompress = true;
-                    mediaOptions.isShowVideo = true;
                     MediaSelector.with(MediaFragment.this).setMediaOptions(mediaOptions).openMediaActivity();
                 }
             }

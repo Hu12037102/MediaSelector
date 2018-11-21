@@ -2,6 +2,7 @@ package com.example.media.activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,7 +17,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -205,24 +211,32 @@ public class MediaActivity extends BaseActivity {
     private void resultMediaData() {
         if (mCheckMediaFileData.size() > 0) {
             if (mOptions.isCompress && !mOptions.isShowVideo) {
+                final ViewGroup viewGroup = (ViewGroup) getWindow().getDecorView();
+                final View inflate = LayoutInflater.from(MediaActivity.this).inflate(R.layout.item_loading_view, viewGroup, false);
                 compressImage(mCheckMediaFileData, new CompressImageTask.OnImagesResult() {
                     @Override
                     public void startCompress() {
-
+                        viewGroup.addView(inflate);
                     }
 
                     @Override
                     public void resultFilesSucceed(List<File> list) {
+
                         mCheckMediaFileData.clear();
                         for (File file : list) {
                             mCheckMediaFileData.add(MediaSelectorFile.checkFileToThis(file));
                         }
                         resultMediaIntent();
+                        if (viewGroup.indexOfChild(inflate) != -1) {
+                            viewGroup.removeView(inflate);
+                        }
                     }
 
                     @Override
                     public void resultFilesError() {
-
+                        if (viewGroup.indexOfChild(inflate) != -1) {
+                            viewGroup.removeView(inflate);
+                        }
                     }
                 });
 

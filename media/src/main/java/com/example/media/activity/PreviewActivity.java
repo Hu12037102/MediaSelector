@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -227,10 +228,12 @@ public class PreviewActivity extends BaseActivity {
 
     private void sureData() {
         if (mOptions.isCompress && !mOptions.isShowVideo && !mOptions.isCrop) {
+            final ViewGroup viewGroup = (ViewGroup) getWindow().getDecorView();
+            final View inflate = LayoutInflater.from(PreviewActivity.this).inflate(R.layout.item_loading_view, viewGroup, false);
             compressImage(mCheckMediaData, new CompressImageTask.OnImagesResult() {
                 @Override
                 public void startCompress() {
-
+                    viewGroup.addView(inflate);
                 }
 
                 @Override
@@ -241,11 +244,16 @@ public class PreviewActivity extends BaseActivity {
                     }
                     EventBus.getDefault().post(mCheckMediaData);
                     finish();
+                    if (viewGroup.indexOfChild(inflate) != -1) {
+                        viewGroup.removeView(inflate);
+                    }
                 }
 
                 @Override
                 public void resultFilesError() {
-
+                    if (viewGroup.indexOfChild(inflate) != -1) {
+                        viewGroup.removeView(inflate);
+                    }
                 }
             });
         } else {

@@ -125,7 +125,7 @@ public class MediaSelector {
         }
     }
 
-    public static MediaOptions getDefaultOptions() {
+    public synchronized static MediaOptions getDefaultOptions() {
         return new MediaOptions();
     }
 }
