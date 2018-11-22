@@ -337,6 +337,7 @@ public class MediaActivity extends BaseActivity {
             public void onAllow(List<String> list) {
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
               //  cameraIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                cameraIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 if (cameraIntent.resolveActivity(getPackageManager()) != null) {
                     mCameraFile = FileUtils.resultImageFile(MediaActivity.this);
                     Uri cameraUri = FileUtils.fileToUri(MediaActivity.this, mCameraFile, cameraIntent);
