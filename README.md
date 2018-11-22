@@ -16,7 +16,7 @@ MediaSelector是一个针对于Android媒体库选择的框架，该风格完全
 ### 运行效果预览【加载剪切图片资源】
 ![压缩运行效果预览](./MediaSelectorCropGif.gif)
 
-#### [QQ交流群](https://jq.qq.com/?_wv=1027&k=5KJOlS3)
+#### [QQ交流群-点我加群](https://jq.qq.com/?_wv=1027&k=5KJOlS3)
 
 ```java
 
