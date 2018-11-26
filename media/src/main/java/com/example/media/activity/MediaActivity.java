@@ -413,7 +413,7 @@ public class MediaActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if (mFolderWindow != null && mFolderWindow.getFolderWindow().isShowing()) {
-            mFolderWindow.getFolderWindow().dismiss();
+            mFolderWindow.dismissWindows();
         } else {
             super.onBackPressed();
         }
@@ -480,4 +480,5 @@ public class MediaActivity extends BaseActivity {
 
         }
     }
+
 }

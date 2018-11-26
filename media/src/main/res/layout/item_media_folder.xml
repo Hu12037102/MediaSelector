@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="100dp"
@@ -7,33 +8,42 @@
     android:clickable="true"
     android:focusable="true">
 
-    <RelativeLayout
-        android:id="@+id/rl_left"
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv_left"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp">
+        android:layout_marginLeft="10dp"
+        app:cardCornerRadius="0dp"
 
-        <ImageView
+        app:cardElevation="10dp">
 
-            android:id="@+id/iv_left"
+        <RelativeLayout
+            android:id="@+id/rl_left"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/iv_video_type"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerInParent="true"
-            android:src="@mipmap/icon_video_start" />
-    </RelativeLayout>
+            <ImageView
+
+                android:id="@+id/iv_left"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/iv_video_type"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/icon_video_start" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/rl_left"
+        android:layout_toRightOf="@id/cv_left"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
