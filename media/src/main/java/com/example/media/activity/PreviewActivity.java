@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
@@ -67,6 +69,7 @@ public class PreviewActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+
         mVpPreview = findViewById(R.id.vp_preview);
         ViewGroup.LayoutParams layoutParams = mVpPreview.getLayoutParams();
         layoutParams.width = ScreenUtils.screenWidth(this);
@@ -77,6 +80,12 @@ public class PreviewActivity extends BaseActivity {
         mRvCheckMedia.setLayoutManager(new LinearLayoutManager(this, LinearLayout.HORIZONTAL, false));
         mTvBottom = findViewById(R.id.ctv_bottom);
         mLlBottom = findViewById(R.id.ll_bottom);
+    }
+
+    @Override
+    protected void initInflate() {
+        super.initInflate();
+        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
     }
 
     @Override
@@ -224,6 +233,28 @@ public class PreviewActivity extends BaseActivity {
 
             }
         });
+        mTvTop.setOnBackViewClickListener(new TitleView.OnBackViewClickListener() {
+            @Override
+            public void onBackClick(@NonNull View view) {
+                finish();
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mAnimatorSet != null && mAnimatorSet.isRunning() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            mAnimatorSet.pause();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mAnimatorSet != null) {
+            mAnimatorSet.end();
+        }
     }
 
     private void sureData() {
