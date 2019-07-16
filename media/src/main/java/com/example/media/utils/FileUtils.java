@@ -9,8 +9,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.v4.content.FileProvider;
+import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 
 import com.example.media.weight.MediaScanner;
 

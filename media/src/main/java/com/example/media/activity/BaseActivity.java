@@ -2,9 +2,9 @@ package com.example.media.activity;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.ColorRes;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.ColorRes;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import android.view.WindowManager;
 
 import com.example.media.R;
@@ -15,7 +15,6 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,6 +94,7 @@ public abstract class BaseActivity extends PermissionActivity {
             configData.add(MediaSelectorFile.thisToDefaultImageConfig(mMediaFileData.get(i)));
         }
 
-        CompressImageTask.get().compressImages(this, configData, onImagesResult);
+        CompressImageTask.get().compressImages(configData, onImagesResult);
     }
+
 }

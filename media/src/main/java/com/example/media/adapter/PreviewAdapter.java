@@ -1,27 +1,19 @@
 package com.example.media.adapter;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Color;
-import android.media.MediaPlayer;
-import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.MediaController;
-import android.widget.VideoView;
 
 import com.example.media.R;
 import com.example.media.bean.MediaSelectorFile;
 import com.example.media.utils.GlideUtils;
 import com.example.media.utils.ScreenUtils;
-import com.example.media.weight.Toasts;
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
 

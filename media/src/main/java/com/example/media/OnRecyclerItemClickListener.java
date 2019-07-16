@@ -1,6 +1,6 @@
 package com.example.media;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 
 public interface OnRecyclerItemClickListener {

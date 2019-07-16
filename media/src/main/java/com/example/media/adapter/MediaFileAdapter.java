@@ -1,15 +1,14 @@
 package com.example.media.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -18,7 +17,6 @@ import com.example.media.MediaSelector;
 import com.example.media.OnRecyclerItemClickListener;
 import com.example.media.R;
 import com.example.media.bean.MediaSelectorFile;
-import com.example.media.resolver.Contast;
 import com.example.media.utils.DateUtils;
 import com.example.media.utils.GlideUtils;
 

@@ -2,27 +2,21 @@ package com.example.media.activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.ImageDecoder;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -49,7 +43,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import utils.bean.ImageConfig;
 import utils.task.CompressImageTask;
 
 public class MediaActivity extends BaseActivity {

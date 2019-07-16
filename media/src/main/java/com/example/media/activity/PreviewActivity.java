@@ -3,15 +3,14 @@ package com.example.media.activity;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.viewpager.widget.ViewPager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +27,6 @@ import com.example.media.R;
 import com.example.media.adapter.MediaCheckAdapter;
 import com.example.media.adapter.PreviewAdapter;
 import com.example.media.bean.MediaSelectorFile;
-import com.example.media.resolver.ActivityManger;
 import com.example.media.resolver.Contast;
 import com.example.media.utils.FileUtils;
 import com.example.media.utils.ScreenUtils;
@@ -42,7 +40,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import utils.bean.ImageConfig;
 import utils.task.CompressImageTask;
 
 public class PreviewActivity extends BaseActivity {
