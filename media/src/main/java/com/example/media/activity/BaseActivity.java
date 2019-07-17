@@ -94,7 +94,7 @@ public abstract class BaseActivity extends PermissionActivity {
             configData.add(MediaSelectorFile.thisToDefaultImageConfig(mMediaFileData.get(i)));
         }
 
-        CompressImageTask.get().compressImages(configData, onImagesResult);
+        CompressImageTask.get().compressImages(this,configData, onImagesResult);
     }
 
 }
