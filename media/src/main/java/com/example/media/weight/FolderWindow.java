@@ -94,7 +94,6 @@ public class FolderWindow {
             mRvFolder.setAdapter(mFolderAdapter);
             mPopupWindow.setContentView(inflateView);
 
-
             //  mPopupWindow.setAnimationStyle(R.style.DialogAnimation);
 
         }
